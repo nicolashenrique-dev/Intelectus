@@ -8,6 +8,7 @@ import iaRoutes from './src/routes/iaRoutes.js';
 import itensRoutes from './src/routes/itensRoutes.js';
 import apiRoutes from './src/routes/apiRoutes.js';
 import swaggerDocument from './config/swagger.js';
+import { autenticarToken } from './src/middleware/auth.js';
 
 dotenv.config();
 
@@ -67,11 +68,11 @@ app.get('/', (req, res) => {
     res.redirect('/api-docs');
 });
 
-app.use('/autenticacao', authRoutes);
-app.use('/trilhas', roadmapRoutes);
-app.use('/ia', iaRoutes);
-app.use('/itens', itensRoutes);
-app.use('/api', apiRoutes);
+app.use('/autenticacao', authRoutes); // login e cadastro = sem token
+app.use('/trilhas', autenticarToken, roadmapRoutes);
+app.use('/ia', autenticarToken, iaRoutes);
+app.use('/itens', autenticarToken, itensRoutes);
+app.use('/api', apiRoutes); // alias mobile: protegido individualmente
 
 const PORT = process.env.PORT || 3000;
 

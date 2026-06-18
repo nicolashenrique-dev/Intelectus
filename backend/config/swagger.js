@@ -16,8 +16,7 @@ const documentacao = {
         { name: 'Itens', description: 'Listagem de trilhas e destaques' },
         { name: 'Inteligência Artificial', description: 'Recomendações via Ollama e vídeos do YouTube' },
     ],
-    paths: {
-        '/autenticacao/login': {
+    paths: {       '/autenticacao/login': {
             post: {
                 tags: ['Autenticação'],
                 summary: 'RF01 - Realiza login do usuário',
