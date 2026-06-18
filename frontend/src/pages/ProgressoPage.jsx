@@ -18,7 +18,7 @@ const ProgressoPage = () => {
   const fetchRoadmap = async (uid) => {
     setLoading(true)
     try {
-      const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+      const api = import.meta.env.VITE_API_URL || 'https://projeto-sem.vercel.app'
       const r = await fetch(`${api}/roadmap/user/${uid}`)
       const d = await r.json()
       setRoadmap(d.success && d.roadmap ? d.roadmap : null)

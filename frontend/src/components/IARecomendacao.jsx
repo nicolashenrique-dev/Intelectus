@@ -21,7 +21,7 @@ const IARecomendacao = ({ perfilInicial = {} }) => {
         setErro('')
 
         try {
-            const resposta = await fetch('https://projeto-9ccub6pb4-ornicolas-projects.vercel.app/ia/recomendar', {
+            const resposta = await fetch('https://projeto-sem.vercel.app/ia/recomendar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formulario)
@@ -48,7 +48,7 @@ const IARecomendacao = ({ perfilInicial = {} }) => {
 
         try {
             const tema = encodeURIComponent(`${modulo.nome} ${formulario.interesse}`)
-            const resposta = await fetch(`https://projeto-9ccub6pb4-ornicolas-projects.vercel.app/ia/videos?tema=${tema}&nivel=${formulario.nivel}`)
+            const resposta = await fetch(`https://projeto-sem.vercel.app/ia/videos?tema=${tema}&nivel=${formulario.nivel}`)
             const dados = await resposta.json()
             if (dados.success) setVideos(dados.videos)
         } catch (err) {

@@ -364,7 +364,7 @@ const Quiz = () => {
         experience: questions[1].options.find(o => o.value === finalAnswers[2])?.label,
         goal:       questions[2].options.find(o => o.value === finalAnswers[3])?.label,
       }
-      const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+      const api = import.meta.env.VITE_API_URL || 'https://projeto-sem.vercel.app'
       const res  = await fetch(`${api}/roadmap/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

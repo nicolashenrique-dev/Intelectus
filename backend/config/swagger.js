@@ -6,7 +6,7 @@ const documentacao = {
         description: 'API para geração de trilhas de aprendizado personalizadas com IA (Ollama), integração YouTube e gestão de perfil via Firebase.',
     },
     servers: [
-        { url: 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app', description: 'Servidor de Produção (Vercel)' },
+        { url: 'https://projeto-sem.vercel.app', description: 'Servidor de Produção (Vercel)' },
         { url: 'http://localhost:3000', description: 'Servidor local' },
     ],
     tags: [
@@ -452,8 +452,8 @@ const documentacao = {
                 type: 'object',
                 required: ['email', 'password'],
                 properties: {
-                    email: { type: 'string', format: 'email', example: 'admin@intelectus.com' },
-                    password: { type: 'string', example: '123456' },
+                    email: { type: 'string', format: 'email', example: 'nicolas@gmail.com' },
+                    password: { type: 'string', example: '12345678' },
                 },
             },
             RespostaLogin: {

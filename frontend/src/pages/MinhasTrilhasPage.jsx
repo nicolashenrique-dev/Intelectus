@@ -24,7 +24,7 @@ const MinhasTrilhasPage = () => {
   const fetchRoadmap = async (uid) => {
     setLoading(true)
     try {
-      const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+      const api = import.meta.env.VITE_API_URL || 'https://projeto-sem.vercel.app'
       const r = await fetch(`${api}/roadmap/user/${uid}`)
       const d = await r.json()
       setRoadmap(d.success && d.roadmap ? d.roadmap : null)
@@ -40,7 +40,7 @@ const MinhasTrilhasPage = () => {
     setErroVideos(false)
     setVideos([])
     try {
-      const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+      const api = import.meta.env.VITE_API_URL || 'https://projeto-sem.vercel.app'
       const r = await fetch(`${api}/ia/videos?tema=${encodeURIComponent(tema)}&nivel=${encodeURIComponent(nivel || '')}`)
       if (!r.ok) throw new Error()
       const d = await r.json()
@@ -55,7 +55,7 @@ const MinhasTrilhasPage = () => {
   const toggleStatus = async (nodeId, currentStatus) => {
     const newStatus = currentStatus === 'completed' ? 'in-progress' : 'completed'
     try {
-      const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+      const api = import.meta.env.VITE_API_URL || 'https://projeto-sem.vercel.app'
       const r = await fetch(`${api}/roadmap/node/${nodeId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
