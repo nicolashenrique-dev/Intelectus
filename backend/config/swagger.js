@@ -10,7 +10,6 @@ const documentacao = {
         { url: 'http://localhost:3000', description: 'Servidor local' },
     ],
     tags: [
-        { name: 'Sistema', description: 'Health check e utilitários' },
         { name: 'Autenticação', description: 'RF01 - Login e cadastro' },
         { name: 'Perfil', description: 'RF02 - Dados do usuário' },
         { name: 'Trilhas', description: 'RF04, RF06, RF07, RF08, RF09 - Trilhas de aprendizado' },
@@ -18,22 +17,6 @@ const documentacao = {
         { name: 'Inteligência Artificial', description: 'Recomendações via Ollama e vídeos do YouTube' },
     ],
     paths: {
-        '/health': {
-            get: {
-                tags: ['Sistema'],
-                summary: 'Verifica se a API está online',
-                responses: {
-                    200: {
-                        description: 'API operacional',
-                        content: {
-                            'application/json': {
-                                schema: { $ref: '#/components/schemas/RespostaSaude' },
-                            },
-                        },
-                    },
-                },
-            },
-        },
         '/autenticacao/login': {
             post: {
                 tags: ['Autenticação'],
