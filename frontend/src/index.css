@@ -1,11 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
-:root {
+:root, body.theme-dark {
   --primary: #5849ff;
   --primary-hover: #4738e4;
   --bg-darker: #070b14;
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
+
+  --indigo: #6366f1;
+  --indigo-dim: rgba(99,102,241,0.10);
+  --indigo-border: rgba(99,102,241,0.22);
+  --surface: rgba(255,255,255,0.025);
+  --surface-hover: rgba(255,255,255,0.045);
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.13);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --bg: #060b18;
+  --sidebar-bg: #080e1d;
+  --card-bg: rgba(15,23,42,0.55);
+}
+
+body.theme-light {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-darker: #f8fafc;
+  --glass-bg: rgba(0, 0, 0, 0.03);
+  --glass-border: rgba(0, 0, 0, 0.08);
+
+  --indigo: #4f46e5;
+  --indigo-dim: rgba(79,70,229,0.10);
+  --indigo-border: rgba(79,70,229,0.22);
+  --surface: rgba(0,0,0,0.035);
+  --surface-hover: rgba(0,0,0,0.06);
+  --border: rgba(0,0,0,0.1);
+  --border-hover: rgba(0,0,0,0.18);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --bg: #f8fafc;
+  --sidebar-bg: #ffffff;
+  --card-bg: rgba(255,255,255,1);
+}
+
+body.theme-midnight {
+  --bg-darker: #0a0014;
+  --bg: #0a0014;
+  --sidebar-bg: #0d001a;
+  --card-bg: rgba(20,0,40,0.55);
+}
+
+body.theme-slate {
+  --bg-darker: #0f172a;
+  --bg: #0f172a;
+  --sidebar-bg: #1e293b;
+  --card-bg: rgba(30,41,59,0.55);
 }
 
 /* ===== BASE ===== */

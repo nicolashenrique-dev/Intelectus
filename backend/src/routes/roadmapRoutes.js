@@ -10,10 +10,10 @@ import { listarDestaques } from '../controllers/itensController.js';
 const router = express.Router();
 
 // RF04 - Geração de Trilha Personalizada
-router.post('/generate', gerarTrilha);
+router.post('/gerar', gerarTrilha);
 
 // RF06 - Obter trilha do usuário
-router.get('/user/:uid', obterTrilhaUsuario);
+router.get('/usuario/:uid', obterTrilhaUsuario);
 
 // Trilhas em destaque (Dashboard)
 router.get('/destaques', listarDestaques);
@@ -22,6 +22,6 @@ router.get('/destaques', listarDestaques);
 router.get('/:id', obterTrilhaPorId);
 
 // RF09 - Status de Conclusão
-router.patch('/node/:id', atualizarStatusNo);
+router.patch('/no/:id', atualizarStatusNo);
 
 export default router;

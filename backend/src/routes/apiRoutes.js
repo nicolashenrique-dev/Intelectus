@@ -8,10 +8,10 @@ import itensRoutes from './itensRoutes.js';
 const router = express.Router();
 
 router.post('/login', realizarLogin);
-router.post('/register', registrarUsuario);
-router.get('/profile/:uid', obterPerfilUsuario);
+router.post('/cadastro', registrarUsuario);
+router.get('/perfil/:uid', obterPerfilUsuario);
 
-router.use('/roadmap', roadmapRoutes);
+router.use('/trilhas', roadmapRoutes);
 router.use('/ia', iaRoutes);
 router.use('/itens', itensRoutes);
 

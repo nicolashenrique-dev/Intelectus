@@ -6,6 +6,7 @@ const documentacao = {
         description: 'API para geração de trilhas de aprendizado personalizadas com IA (Ollama), integração YouTube e gestão de perfil via Firebase.',
     },
     servers: [
+        { url: 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app', description: 'Servidor de Produção (Vercel)' },
         { url: 'http://localhost:3000', description: 'Servidor local' },
     ],
     tags: [
@@ -26,14 +27,14 @@ const documentacao = {
                         description: 'API operacional',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/HealthResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaSaude' },
                             },
                         },
                     },
                 },
             },
         },
-        '/auth/login': {
+        '/autenticacao/login': {
             post: {
                 tags: ['Autenticação'],
                 summary: 'RF01 - Realiza login do usuário',
@@ -41,7 +42,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/LoginRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoLogin' },
                         },
                     },
                 },
@@ -50,7 +51,7 @@ const documentacao = {
                         description: 'Login realizado com sucesso',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/LoginResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaLogin' },
                             },
                         },
                     },
@@ -59,7 +60,7 @@ const documentacao = {
                 },
             },
         },
-        '/auth/register': {
+        '/autenticacao/cadastro': {
             post: {
                 tags: ['Autenticação'],
                 summary: 'Registra um novo usuário (mock para integração mobile)',
@@ -67,7 +68,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/RegisterRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoCadastro' },
                         },
                     },
                 },
@@ -76,7 +77,7 @@ const documentacao = {
                         description: 'Usuário registrado',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/RegisterResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaCadastro' },
                             },
                         },
                     },
@@ -84,7 +85,7 @@ const documentacao = {
                 },
             },
         },
-        '/auth/profile/{uid}': {
+        '/autenticacao/perfil/{uid}': {
             get: {
                 tags: ['Perfil'],
                 summary: 'RF02 - Obtém perfil do usuário no Firestore',
@@ -102,7 +103,7 @@ const documentacao = {
                         description: 'Perfil encontrado',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/ProfileResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaPerfil' },
                             },
                         },
                     },
@@ -120,7 +121,7 @@ const documentacao = {
                         description: 'Lista de itens/trilhas',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/ItensResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaItens' },
                             },
                         },
                     },
@@ -136,14 +137,14 @@ const documentacao = {
                         description: 'Trilhas em destaque',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/DestaquesResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaDestaques' },
                             },
                         },
                     },
                 },
             },
         },
-        '/roadmap/generate': {
+        '/trilhas/gerar': {
             post: {
                 tags: ['Trilhas'],
                 summary: 'RF04 - Gera trilha personalizada com base no quiz/perfil',
@@ -151,7 +152,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/RoadmapGenerateRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoGerarTrilha' },
                         },
                     },
                 },
@@ -160,7 +161,7 @@ const documentacao = {
                         description: 'Trilha gerada com sucesso',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/RoadmapGenerateResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaGerarTrilha' },
                             },
                         },
                     },
@@ -169,7 +170,7 @@ const documentacao = {
                 },
             },
         },
-        '/roadmap/user/{uid}': {
+        '/trilhas/usuario/{uid}': {
             get: {
                 tags: ['Trilhas'],
                 summary: 'RF06 - Obtém a trilha salva do usuário no Firestore',
@@ -186,7 +187,7 @@ const documentacao = {
                         description: 'Trilha do usuário',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/RoadmapUserResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaTrilhaUsuario' },
                             },
                         },
                     },
@@ -194,7 +195,7 @@ const documentacao = {
                 },
             },
         },
-        '/roadmap/destaques': {
+        '/trilhas/destaques': {
             get: {
                 tags: ['Trilhas'],
                 summary: 'Lista trilhas em destaque',
@@ -203,14 +204,14 @@ const documentacao = {
                         description: 'Trilhas em destaque',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/DestaquesResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaDestaques' },
                             },
                         },
                     },
                 },
             },
         },
-        '/roadmap/{id}': {
+        '/trilhas/{id}': {
             get: {
                 tags: ['Trilhas'],
                 summary: 'RF07/RF08 - Obtém detalhes de uma trilha por ID',
@@ -228,14 +229,14 @@ const documentacao = {
                         description: 'Detalhes da trilha',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/RoadmapDetailResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaDetalheTrilha' },
                             },
                         },
                     },
                 },
             },
         },
-        '/roadmap/node/{id}': {
+        '/trilhas/no/{id}': {
             patch: {
                 tags: ['Trilhas'],
                 summary: 'RF09 - Atualiza status de conclusão de um nó da trilha',
@@ -252,7 +253,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/RoadmapNodeStatusRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoStatusNoTrilha' },
                         },
                     },
                 },
@@ -261,7 +262,7 @@ const documentacao = {
                         description: 'Status atualizado',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/RoadmapNodeStatusResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaStatusNoTrilha' },
                             },
                         },
                     },
@@ -278,7 +279,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/IaRecomendacaoRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoRecomendacaoIA' },
                         },
                     },
                 },
@@ -287,7 +288,7 @@ const documentacao = {
                         description: 'Recomendação gerada',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/IaRecomendacaoResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaRecomendacaoIA' },
                             },
                         },
                     },
@@ -319,7 +320,7 @@ const documentacao = {
                         description: 'Lista de vídeos',
                         content: {
                             'application/json': {
-                                schema: { $ref: '#/components/schemas/YoutubeVideosResponse' },
+                                schema: { $ref: '#/components/schemas/RespostaVideosYoutube' },
                             },
                         },
                     },
@@ -336,7 +337,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/LoginRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoLogin' },
                         },
                     },
                 },
@@ -346,7 +347,7 @@ const documentacao = {
                 },
             },
         },
-        '/api/register': {
+        '/api/cadastro': {
             post: {
                 tags: ['Autenticação'],
                 summary: 'Alias mobile - Cadastro',
@@ -354,7 +355,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/RegisterRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoCadastro' },
                         },
                     },
                 },
@@ -363,7 +364,7 @@ const documentacao = {
                 },
             },
         },
-        '/api/profile/{uid}': {
+        '/api/perfil/{uid}': {
             get: {
                 tags: ['Perfil'],
                 summary: 'Alias mobile - Perfil do usuário',
@@ -376,7 +377,7 @@ const documentacao = {
                 },
             },
         },
-        '/api/roadmap/generate': {
+        '/api/trilhas/gerar': {
             post: {
                 tags: ['Trilhas'],
                 summary: 'Alias mobile - Gerar trilha',
@@ -384,7 +385,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/RoadmapGenerateRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoGerarTrilha' },
                         },
                     },
                 },
@@ -393,7 +394,7 @@ const documentacao = {
                 },
             },
         },
-        '/api/roadmap/user/{uid}': {
+        '/api/trilhas/usuario/{uid}': {
             get: {
                 tags: ['Trilhas'],
                 summary: 'Alias mobile - Trilha do usuário',
@@ -414,7 +415,7 @@ const documentacao = {
                     required: true,
                     content: {
                         'application/json': {
-                            schema: { $ref: '#/components/schemas/IaRecomendacaoRequest' },
+                            schema: { $ref: '#/components/schemas/RequisicaoRecomendacaoIA' },
                         },
                     },
                 },
@@ -457,14 +458,14 @@ const documentacao = {
     },
     components: {
         schemas: {
-            HealthResponse: {
+            RespostaSaude: {
                 type: 'object',
                 properties: {
                     status: { type: 'string', example: 'ok' },
                     timestamp: { type: 'string', format: 'date-time' },
                 },
             },
-            LoginRequest: {
+            RequisicaoLogin: {
                 type: 'object',
                 required: ['email', 'password'],
                 properties: {
@@ -472,7 +473,7 @@ const documentacao = {
                     password: { type: 'string', example: '123456' },
                 },
             },
-            LoginResponse: {
+            RespostaLogin: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean', example: true },
@@ -487,7 +488,7 @@ const documentacao = {
                     },
                 },
             },
-            RegisterRequest: {
+            RequisicaoCadastro: {
                 type: 'object',
                 required: ['nome', 'email', 'password'],
                 properties: {
@@ -496,7 +497,7 @@ const documentacao = {
                     password: { type: 'string', example: 'senha123' },
                 },
             },
-            RegisterResponse: {
+            RespostaCadastro: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
@@ -511,7 +512,7 @@ const documentacao = {
                     },
                 },
             },
-            ProfileResponse: {
+            RespostaPerfil: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
@@ -528,21 +529,21 @@ const documentacao = {
                     progress: { type: 'integer' },
                 },
             },
-            ItensResponse: {
+            RespostaItens: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
                     itens: { type: 'array', items: { $ref: '#/components/schemas/ItemTrilha' } },
                 },
             },
-            DestaquesResponse: {
+            RespostaDestaques: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
                     destaques: { type: 'array', items: { $ref: '#/components/schemas/ItemTrilha' } },
                 },
             },
-            QuizProfile: {
+            PerfilQuiz: {
                 type: 'object',
                 required: ['interest'],
                 properties: {
@@ -551,14 +552,14 @@ const documentacao = {
                     goal: { type: 'string', example: 'Conseguir o primeiro emprego' },
                 },
             },
-            RoadmapGenerateRequest: {
+            RequisicaoGerarTrilha: {
                 type: 'object',
                 required: ['profile'],
                 properties: {
-                    profile: { $ref: '#/components/schemas/QuizProfile' },
+                    profile: { $ref: '#/components/schemas/PerfilQuiz' },
                 },
             },
-            RoadmapNode: {
+            NoTrilha: {
                 type: 'object',
                 properties: {
                     id: { type: 'integer' },
@@ -568,38 +569,38 @@ const documentacao = {
                     level: { type: 'string' },
                 },
             },
-            Roadmap: {
+            Trilha: {
                 type: 'object',
                 properties: {
                     title: { type: 'string' },
                     description: { type: 'string' },
-                    nodes: { type: 'array', items: { $ref: '#/components/schemas/RoadmapNode' } },
+                    nodes: { type: 'array', items: { $ref: '#/components/schemas/NoTrilha' } },
                     createdAt: { type: 'string', format: 'date-time' },
                     fonte: { type: 'string', enum: ['ollama', 'fallback'] },
                 },
             },
-            RoadmapGenerateResponse: {
+            RespostaGerarTrilha: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
-                    roadmap: { $ref: '#/components/schemas/Roadmap' },
+                    roadmap: { $ref: '#/components/schemas/Trilha' },
                 },
             },
-            RoadmapUserResponse: {
+            RespostaTrilhaUsuario: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
-                    roadmap: { $ref: '#/components/schemas/Roadmap' },
+                    roadmap: { $ref: '#/components/schemas/Trilha' },
                 },
             },
-            RoadmapDetailResponse: {
+            RespostaDetalheTrilha: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
-                    roadmap: { $ref: '#/components/schemas/Roadmap' },
+                    roadmap: { $ref: '#/components/schemas/Trilha' },
                 },
             },
-            RoadmapNodeStatusRequest: {
+            RequisicaoStatusNoTrilha: {
                 type: 'object',
                 required: ['status'],
                 properties: {
@@ -607,16 +608,16 @@ const documentacao = {
                     uid: { type: 'string', description: 'UID Firebase para persistir no Firestore' },
                 },
             },
-            RoadmapNodeStatusResponse: {
+            RespostaStatusNoTrilha: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
                     message: { type: 'string' },
-                    node: { $ref: '#/components/schemas/RoadmapNode' },
-                    roadmap: { $ref: '#/components/schemas/Roadmap' },
+                    node: { $ref: '#/components/schemas/NoTrilha' },
+                    roadmap: { $ref: '#/components/schemas/Trilha' },
                 },
             },
-            IaRecomendacaoRequest: {
+            RequisicaoRecomendacaoIA: {
                 type: 'object',
                 required: ['interesse', 'nivel', 'objetivo'],
                 properties: {
@@ -644,7 +645,7 @@ const documentacao = {
                     palavras_chave: { type: 'array', items: { type: 'string' } },
                 },
             },
-            IaRecomendacaoResponse: {
+            RespostaRecomendacaoIA: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },
@@ -663,7 +664,7 @@ const documentacao = {
                     url: { type: 'string', format: 'uri' },
                 },
             },
-            YoutubeVideosResponse: {
+            RespostaVideosYoutube: {
                 type: 'object',
                 properties: {
                     success: { type: 'boolean' },

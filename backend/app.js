@@ -70,8 +70,8 @@ app.get('/', (req, res) => {
     res.redirect('/api-docs');
 });
 
-app.use('/auth', authRoutes);
-app.use('/roadmap', roadmapRoutes);
+app.use('/autenticacao', authRoutes);
+app.use('/trilhas', roadmapRoutes);
 app.use('/ia', iaRoutes);
 app.use('/itens', itensRoutes);
 app.use('/api', apiRoutes);

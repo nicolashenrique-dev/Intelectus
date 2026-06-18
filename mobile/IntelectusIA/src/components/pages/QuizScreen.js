@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import styles from '../../styles/estilos';
+import { darkStyles, lightStyles } from '../../styles/estilos';
+import { useTheme } from '../../contexts/ThemeContext';
 import { getBaseUrl } from '../../utils';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -39,6 +40,8 @@ const questions = [
 ];
 
 const QuizScreen = ({ navigation, route }) => {
+    const { isDarkMode } = useTheme();
+    const styles = isDarkMode ? darkStyles : lightStyles;
     const { uid } = route.params || {};
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState({});
@@ -59,17 +62,19 @@ const QuizScreen = ({ navigation, route }) => {
         setLoading(true);
         setError('');
         try {
-            const profile = {
-                interest: questions[0].options.find(o => o.value === finalAnswers[1])?.label,
-                experience: questions[1].options.find(o => o.value === finalAnswers[2])?.label,
-                goal: questions[2].options.find(o => o.value === finalAnswers[3])?.label
-            };
+            const interest = questions[0].options.find(o => o.value === finalAnswers[1])?.label;
+            const level = questions[1].options.find(o => o.value === finalAnswers[2])?.label;
+            const goal = questions[2].options.find(o => o.value === finalAnswers[3])?.label;
 
             const baseUrl = getBaseUrl();
-            const response = await fetch(`${baseUrl}/api/roadmap/generate`, {
+            // Enviando o Perfil como QuizProfile
+            const response = await fetch(`${baseUrl}/api/trilhas/gerar`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ profile, uid: uid || 'mock-user-uid' })
+                body: JSON.stringify({
+                    profile: { interest, experience: level, goal },
+                    uid: uid || 'mock-user-uid'
+                })
             });
 
             const data = await response.json();

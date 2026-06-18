@@ -6,9 +6,9 @@ const router = express.Router();
 
 // RF01 - Realizar Login
 router.post('/login', realizarLogin);
-router.post('/register', registrarUsuario);
+router.post('/cadastro', registrarUsuario);
 
 // RF02 - Perfil do usuário
-router.get('/profile/:uid', obterPerfilUsuario);
+router.get('/perfil/:uid', obterPerfilUsuario);
 
 export default router;

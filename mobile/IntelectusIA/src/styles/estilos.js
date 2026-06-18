@@ -1,491 +1,218 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
 
-export default StyleSheet.create({
-    // LOGIN SCREEN STYLES
+const { width, height } = Dimensions.get('window');
+
+export const darkStyles = StyleSheet.create({
+    // ==========================================
+    // 1. ESTRUTURA GLOBAL E DASHBOARD (Responsivo: Azul e Roxo)
+    // ==========================================
     container: {
         flex: 1,
-        backgroundColor: '#F8FAFC',
+        backgroundColor: '#0a0f1d', // Fundo Dark Mode Premium para o Dashboard
     },
-    gradientHeader: {
-        display: 'none',
-    },
-    brainIconContainer: {
-        display: 'none',
-    },
-    brandTitle: {
-        display: 'none',
-    },
-    brandDescription: {
-        display: 'none',
-    },
-    featuresWrapper: {
-        display: 'none',
-    },
-    featureRow: {
-        display: 'none',
-    },
-    featureIconCircle: {
-        display: 'none',
-    },
-    featureTitle: {
-        display: 'none',
-    },
-    featureSubtitle: {
-        display: 'none',
-    },
-    loginFormArea: {
-        backgroundColor: '#FFFFFF',
-        marginTop: Platform.OS === 'ios' ? 80 : 60,
-        marginHorizontal: 22,
-        borderRadius: 40,
-        padding: 38,
-        paddingTop: 50,
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 25 },
-        shadowOpacity: 0.12,
-        shadowRadius: 40,
-        elevation: 18,
-        marginBottom: 40,
-    },
-    titleGradient: {
-        fontSize: 40,
-        fontWeight: '900',
-        color: '#5b5ef7',
-        marginBottom: 10,
-        letterSpacing: -1.5,
-        textShadowColor: 'rgba(91, 94, 247, 0.25)',
-        textShadowOffset: { width: 0, height: 4 },
-        textShadowRadius: 12,
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: '800',
-        color: '#1e293b',
-        marginBottom: 8,
-        letterSpacing: -1,
-    },
-    subtitle: {
-        color: '#64748b',
-        fontSize: 16,
-        marginBottom: 48,
-        lineHeight: 24,
-        fontWeight: '500',
-    },
-    inputGroup: {
-        marginBottom: 26,
-    },
-    label: {
-        color: '#475569',
-        fontSize: 14,
-        fontWeight: '700',
-        marginBottom: 10,
-        marginLeft: 2,
-    },
-    inputWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#F1F5F9',
-        borderRadius: 20,
-        height: 64,
-        paddingHorizontal: 20,
-        borderWidth: 1.5,
-        borderColor: 'rgba(99, 102, 241, 0.05)',
-    },
-    input: {
-        flex: 1,
-        height: '100%',
-        color: '#0F172A',
-        fontSize: 17,
-        fontWeight: '600',
-    },
-    passwordToggle: {
-        padding: 10,
-    },
-    forgotPassword: {
-        alignSelf: 'flex-end',
-        marginVertical: 20,
-        marginRight: 2,
-    },
-    forgotPasswordText: {
-        color: '#5849ff',
-        fontSize: 15,
-        fontWeight: '700',
-    },
-    button: {
-        height: 68,
-        backgroundColor: '#5b5ef7',
-        borderRadius: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: '#5b5ef7',
-        shadowOffset: { width: 0, height: 16 },
-        shadowOpacity: 0.4,
-        shadowRadius: 28,
-        elevation: 15,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-    },
-    buttonText: {
-        color: '#FFFFFF',
-        fontSize: 19,
-        fontWeight: '900',
-        letterSpacing: 1,
-    },
-    registerText: {
-        textAlign: 'center',
-        marginTop: 45,
-        color: '#64748b',
-        fontSize: 15,
-        fontWeight: '500',
-    },
-    registerLink: {
-        color: '#5b5ef7',
-        fontWeight: '900',
-    },
-    footer: {
-        marginTop: 40,
-        alignItems: 'center',
-        paddingBottom: 40,
-        borderTopWidth: 1.5,
-        borderTopColor: '#f1f5f9',
-        paddingTop: 30,
-    },
-    footerText: {
-        color: '#cbd5e1',
-        fontSize: 13,
-        lineHeight: 20,
-        textAlign: 'center',
-        fontWeight: '600',
-    },
-
-    // DASHBOARD SCREEN STYLES
     mainContainer: {
         flex: 1,
-        backgroundColor: '#090e1d',
+        backgroundColor: '#0a0f1d',
     },
     mainContent: {
-        paddingHorizontal: 18,
-        paddingTop: Platform.OS === 'android' ? 26 : 34,
-        paddingBottom: 36,
-        position: 'relative',
-    },
-    screenAccentTop: {
-        position: 'absolute',
-        top: -48,
-        right: -28,
-        width: 180,
-        height: 180,
-        borderRadius: 180,
-        backgroundColor: 'rgba(99, 102, 241, 0.14)',
-    },
-    screenAccentBottom: {
-        position: 'absolute',
-        bottom: 140,
-        left: -44,
-        width: 160,
-        height: 160,
-        borderRadius: 160,
-        backgroundColor: 'rgba(16, 185, 129, 0.08)',
-    },
-    heroCard: {
-        backgroundColor: '#0a0f1f',
-        borderRadius: 28,
-        padding: 28,
-        marginBottom: 28,
-        borderWidth: 2,
-        borderColor: '#6366f1',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 24 },
-        shadowOpacity: 0.4,
-        shadowRadius: 40,
-        elevation: 16,
-        overflow: 'hidden',
-    },
-    heroEyebrow: {
-        color: '#a855f7',
-        fontSize: 13,
-        fontWeight: '900',
-        letterSpacing: 1.4,
-        textTransform: 'uppercase',
-        marginBottom: 8,
+        flexGrow: 1,
+        paddingHorizontal: width * 0.05,
+        paddingTop: Platform.OS === 'android' ? 20 : 10,
+        paddingBottom: 110, // Garante que o conteúdo não suma sob a TabBar
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 24,
-        gap: 12,
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingVertical: 15,
     },
+
+    // ==========================================
+    // CORREÇÃO: ELEMENTOS DE TEXTO DA HOME (Dashboard)
+    // ==========================================
     greetingTitle: {
-        color: '#fff',
-        fontSize: 36,
-        fontWeight: '900',
-        marginBottom: 10,
-        letterSpacing: -0.8,
+        fontSize: 28,          // Reduzido para não quebrar a palavra "Estudante" ou o nome
+        fontWeight: '800',
+        color: '#FFFFFF',      // Mudado para Branco para contrastar com o fundo escuro do seu app
+        letterSpacing: -0.5,
     },
     greetingSubtitle: {
-        color: '#cbd5e1',
-        fontSize: 15,
-        lineHeight: 22,
+        fontSize: 14,
+        color: '#94a3b8',      // Um cinza claro elegante para o subtítulo sobre o fundo escuro
         fontWeight: '500',
+        lineHeight: 20,
+        marginTop: 4,
+    },
+    sectionTitle: {
+        fontSize: 24,          // Ajustado de 32+ para 24 para a frase "Sua Trilha Atual" caber perfeitamente
+        fontWeight: '800',
+        color: '#FFFFFF',      // Mudado para Branco para alinhar com o tema dark da sua home
+        marginTop: 20,
+        marginBottom: 4,
+        letterSpacing: -0.5,
+    },
+    sectionSubtitle: {
+        fontSize: 13,
+        color: '#94a3b8',      // Ajustado para manter a leitura limpa
+        lineHeight: 18,
+        marginBottom: 16,
+    },
+    sectionHeader: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        marginBottom: 16,
+        gap: 4,
+    },
+
+    // ==========================================
+    // 3. CARDS DO DASHBOARD (Fluido, Azul e Roxo)
+    // ==========================================
+    screenAccentTop: {
+        width: '100%',
+        backgroundColor: '#111827',
+        borderRadius: 24,
+        padding: 20,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#1e293b',
+    },
+    heroCard: {
+        backgroundColor: '#1e293b',
+        borderRadius: 24,
+        padding: 20,
+        marginBottom: 24,
+        borderWidth: 1,
+        borderColor: '#334155',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.2,
+        shadowRadius: 15,
+        elevation: 5,
+    },
+    heroEyebrow: {
+        fontSize: 11,
+        fontWeight: '700',
+        color: '#3b82f6', // Azul de Destaque
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+        marginBottom: 6,
     },
     logoutButton: {
         backgroundColor: 'rgba(99, 102, 241, 0.15)',
-        paddingVertical: 12,
-        paddingHorizontal: 12,
-        borderRadius: 16,
-        borderWidth: 1.5,
-        borderColor: '#6366f1',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.25,
-        shadowRadius: 10,
-        elevation: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 99,
+        borderWidth: 1,
+        borderColor: 'rgba(99, 102, 241, 0.3)',
     },
     logoutButtonText: {
-        color: '#f8fafc',
+        color: '#6366f1', // Roxo Elétrico
+        fontSize: 13,
         fontWeight: '700',
-        fontSize: 13,
     },
-    heroActions: {
-        flexDirection: 'row',
-        gap: 12,
-    },
-    buttonPrimary: {
-        flex: 1,
-    },
-    buttonSecondary: {
-        flex: 1,
-        backgroundColor: '#1f2937',
-        borderWidth: 2,
-        borderColor: '#6366f1',
-        shadowColor: '#6366f1',
-        shadowOpacity: 0.2,
-        shadowRadius: 12,
-        elevation: 4,
-        flexDirection: 'row',
-    },
-    buttonTextSecondary: {
-        color: '#c7d2fe',
-        fontSize: 16,
-        fontWeight: '800',
-        letterSpacing: 0,
-    },
-    cardsRow: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginBottom: 24,
-        marginHorizontal: -4,
-    },
-    statCard: {
-        flex: 1,
-        minWidth: '31%',
-        borderRadius: 24,
-        padding: 20,
-        backgroundColor: '#0d1427',
-        borderWidth: 2,
-        borderColor: '#1f2937',
-        marginHorizontal: 4,
-        marginBottom: 14,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 16 },
-        shadowOpacity: 0.4,
-        shadowRadius: 28,
-        elevation: 10,
-    },
-    statCardPrimary: {
-        borderColor: '#6366f1',
-        borderWidth: 2,
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.5,
-        shadowRadius: 20,
-        elevation: 12,
-        backgroundColor: '#0a0f1f',
-    },
-    statCardSecondary: {
-        borderColor: '#10b981',
-        borderWidth: 2,
-        shadowColor: '#10b981',
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.4,
-        shadowRadius: 20,
-        elevation: 12,
-        backgroundColor: '#0a0f1f',
-    },
-    statLabel: {
-        color: '#a8adc7',
-        fontSize: 12,
-        marginBottom: 8,
-        fontWeight: '600',
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
-    },
-    statValue: {
-        color: '#fff',
-        fontSize: 32,
-        fontWeight: '900',
-        letterSpacing: -0.8,
-        marginVertical: 4,
-    },
-    statHint: {
-        color: '#64748b',
-        fontSize: 12,
-        marginTop: 4,
-    },
-    statCardTertiary: {
-        borderColor: '#f59e0b',
-        borderWidth: 2,
-        shadowColor: '#f59e0b',
-        shadowOpacity: 0.3,
-        backgroundColor: '#0f172a',
-    },
-    section: {
-        marginBottom: 22,
-    },
-    sectionHeader: {
-        marginBottom: 12,
-    },
-    sectionTitle: {
-        color: '#fff',
-        fontSize: 22,
-        fontWeight: '900',
-        marginBottom: 8,
-        letterSpacing: -0.4,
-    },
-    sectionSubtitle: {
-        color: '#94a3b8',
-        fontSize: 13,
-        lineHeight: 18,
-    },
+
+    // ==========================================
+    // 4. TRILHAS E DESTAQUES (Dashboard)
+    // ==========================================
     roadmapCard: {
-        borderRadius: 28,
-        backgroundColor: '#0a0f1f',
-        padding: 24,
-        borderWidth: 2,
-        borderColor: '#6366f1',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 18 },
-        shadowOpacity: 0.4,
-        shadowRadius: 32,
-        elevation: 12,
+        backgroundColor: '#1e293b',
+        borderRadius: 20,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#334155',
     },
     roadmapCardTopRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 12,
+        width: '100%',
     },
     roadmapBadge: {
-        color: '#c7d2fe',
-        fontSize: 12,
-        fontWeight: '900',
-        textTransform: 'uppercase',
-        letterSpacing: 1.3,
-        backgroundColor: 'rgba(99, 102, 241, 0.25)',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 999,
-        borderWidth: 1,
-        borderColor: '#6366f1',
-    },
-    roadmapProgressBadge: {
-        color: '#e2e8f0',
+        color: '#6366f1', // Roxo
         fontSize: 12,
         fontWeight: '700',
-        backgroundColor: 'rgba(99, 102, 241, 0.14)',
-        borderRadius: 999,
+        textTransform: 'uppercase',
+    },
+    roadmapProgressBadge: {
+        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+        color: '#10b981',
         paddingHorizontal: 10,
-        paddingVertical: 5,
-        overflow: 'hidden',
+        paddingVertical: 4,
+        borderRadius: 8,
+        fontSize: 12,
+        fontWeight: '700',
     },
     roadmapTitle: {
-        color: '#fff',
-        fontSize: 20,
-        fontWeight: '900',
-        marginBottom: 8,
-        letterSpacing: -0.4,
+        fontSize: 19,
+        fontWeight: '800',
+        color: '#FFFFFF',
+        letterSpacing: -0.3,
     },
     roadmapSubtitle: {
-        color: '#94a3b8',
         fontSize: 14,
-        marginBottom: 14,
+        color: '#94a3b8',
+        lineHeight: 20,
+        marginTop: 6,
+        marginBottom: 16,
     },
     progressBarBackground: {
-        height: 14,
-        borderRadius: 999,
-        backgroundColor: '#1f2937',
+        height: 8,
+        backgroundColor: '#334155',
+        borderRadius: 99,
         overflow: 'hidden',
-        marginBottom: 14,
-        borderWidth: 1.5,
-        borderColor: '#2d3748',
     },
     progressBarFill: {
         height: '100%',
-        borderRadius: 999,
-        backgroundColor: '#6366f1',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.7,
-        shadowRadius: 12,
-        elevation: 6,
+        backgroundColor: '#6366f1', // Roxo
+        borderRadius: 99,
     },
     progressRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 12,
+        marginTop: 8,
     },
     progressText: {
-        color: '#cbd5e1',
         fontSize: 12,
+        color: '#94a3b8',
+        fontWeight: '700',
     },
     highlightCard: {
-        borderRadius: 26,
-        backgroundColor: '#0a0f1f',
-        padding: 22,
-        borderWidth: 2,
-        borderColor: '#a855f7',
-        marginBottom: 18,
-        shadowColor: '#a855f7',
-        shadowOffset: { width: 0, height: 16 },
-        shadowOpacity: 0.35,
-        shadowRadius: 28,
-        elevation: 12,
+        backgroundColor: '#111827',
+        borderRadius: 20,
+        padding: 20,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#1e293b',
     },
     highlightTopRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 12,
-        marginBottom: 4,
+        marginBottom: 8,
+        width: '100%',
     },
     highlightTitle: {
-        color: '#fff',
         fontSize: 17,
-        fontWeight: '900',
-        letterSpacing: -0.3,
+        fontWeight: '700',
+        color: '#FFFFFF',
     },
     highlightLevel: {
-        color: '#a855f7',
         fontSize: 12,
-        fontWeight: '800',
-        backgroundColor: 'rgba(168, 85, 247, 0.15)',
-        borderRadius: 999,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: '#a855f7',
+        color: '#3b82f6', // Azul
+        fontWeight: '700',
+        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
     },
     highlightDescription: {
-        color: '#94a3b8',
         fontSize: 14,
+        color: '#94a3b8',
         lineHeight: 20,
-        marginBottom: 12,
+        marginBottom: 14,
     },
     tagList: {
         flexDirection: 'row',
@@ -493,254 +220,747 @@ export default StyleSheet.create({
         gap: 8,
     },
     tagChip: {
-        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-        borderRadius: 999,
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderWidth: 1,
-        borderColor: '#6366f1',
+        backgroundColor: '#1e293b',
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderRadius: 8,
     },
     tagChipText: {
-        color: '#c7d2fe',
         fontSize: 12,
-        fontWeight: '700',
-        letterSpacing: 0.2,
+        color: '#cbd5e1',
+        fontWeight: '600',
     },
-    emptyStateCard: {
-        borderRadius: 28,
-        backgroundColor: '#0a0f1f',
-        padding: 28,
-        borderWidth: 2,
-        borderStyle: 'dashed',
-        borderColor: '#6366f1',
-        alignItems: 'flex-start',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 14 },
-        shadowOpacity: 0.25,
-        shadowRadius: 24,
-        elevation: 8,
+
+    // ==========================================
+    // 5. RESTAURADO: COMPONENTES DA TELA DE LOGIN ORIGINAL (Base Branca)
+    // ==========================================
+    loginContainer: {
+        flex: 1,
+        backgroundColor: '#5849ff', // Preserva o fundo roxo original da tela de login
     },
-    emptyStateTitle: {
-        color: '#6366f1',
-        fontSize: 20,
-        fontWeight: '900',
-        marginBottom: 8,
-        letterSpacing: -0.3,
+    loginFormArea: {
+        flex: 1,
+        backgroundColor: '#FFFFFF', // Mantém o card branco original intocado
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        marginTop: height * 0.15,
+        padding: 30,
+        paddingTop: 45,
+        minHeight: height * 0.85,
     },
-    emptyStateText: {
+    titleGradient: {
+        fontSize: 36,
+        fontWeight: '800',
+        color: '#5849ff',
+        marginBottom: 10,
+        letterSpacing: -0.8,
+        textAlign: 'center',
+    },
+    subtitle: {
         color: '#94a3b8',
-        fontSize: 14,
-        lineHeight: 20,
-        marginBottom: 16,
+        fontSize: 15,
+        marginBottom: 35,
+        textAlign: 'center',
     },
-    emptyStateButton: {
-        backgroundColor: '#6366f1',
-        borderRadius: 16,
-        paddingVertical: 14,
-        paddingHorizontal: 18,
-        borderWidth: 1,
-        borderColor: '#818cf8',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 12,
-        elevation: 6,
+    inputGroup: {
+        marginBottom: 22,
     },
-    emptyStateButtonText: {
-        color: '#fff',
+    label: {
+        color: '#475569',
         fontSize: 14,
         fontWeight: '700',
+        marginBottom: 10,
     },
-    emptyListCard: {
-        backgroundColor: '#0f172a',
-        borderRadius: 22,
-        borderWidth: 1,
-        borderColor: '#1f2937',
-        padding: 18,
-    },
-    emptyListTitle: {
-        color: '#eef2ff',
-        fontSize: 16,
-        fontWeight: '700',
-        marginBottom: 6,
-    },
-    emptyListText: {
-        color: '#94a3b8',
-        fontSize: 14,
-        lineHeight: 20,
-    },
-    // Advanced UI Elements
-    statIcon: {
-        marginBottom: 12,
-        width: 48,
-        height: 48,
-        borderRadius: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    statIconPrimary: {
-        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-        borderWidth: 1,
-        borderColor: '#6366f1',
-    },
-    statIconSecondary: {
-        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-        borderWidth: 1,
-        borderColor: '#10b981',
-    },
-    statIconTertiary: {
-        backgroundColor: 'rgba(245, 158, 11, 0.2)',
-        borderWidth: 1,
-        borderColor: '#f59e0b',
-    },
-    roadmapProgressBadge: {
-        color: '#fff',
-        fontSize: 14,
-        fontWeight: '900',
-        backgroundColor: 'rgba(99, 102, 241, 0.3)',
-        borderRadius: 999,
-        paddingHorizontal: 14,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: '#6366f1',
-    },
-    largeStatCard: {
-        backgroundColor: '#0a0f1f',
-        borderRadius: 28,
-        padding: 24,
-        marginBottom: 18,
-        borderWidth: 2,
-        borderColor: '#6366f1',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 18 },
-        shadowOpacity: 0.4,
-        shadowRadius: 32,
-        elevation: 12,
-    },
-    largeStatValue: {
-        color: '#fff',
-        fontSize: 48,
-        fontWeight: '900',
-        letterSpacing: -1,
-        marginBottom: 6,
-    },
-    largeStatLabel: {
-        color: '#a8adc7',
-        fontSize: 14,
-        fontWeight: '700',
-        textTransform: 'uppercase',
-        letterSpacing: 0.8,
-    },
-    moduleItem: {
-        backgroundColor: '#0a0f1f',
-        borderRadius: 18,
-        padding: 16,
-        marginBottom: 12,
-        borderWidth: 1,
-        borderColor: 'rgba(99, 102, 241, 0.3)',
+    inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 16,
+        backgroundColor: '#f8fafc',
+        borderWidth: 1.5,
+        borderColor: '#e2e8f0',
+        borderRadius: 18,
+        height: 64,
+        paddingHorizontal: 18,
     },
-    moduleItemActive: {
-        borderColor: '#6366f1',
-        borderWidth: 2,
-        backgroundColor: 'rgba(99, 102, 241, 0.08)',
+    input: {
+        flex: 1,
+        height: '100%',
+        color: '#1e293b',
+        fontSize: 16,
     },
-    moduleItemCompleted: {
-        borderColor: '#10b981',
-        backgroundColor: 'rgba(16, 185, 129, 0.08)',
+    passwordToggle: {
+        padding: 12,
     },
-    moduleIcon: {
-        width: 48,
-        height: 48,
-        borderRadius: 12,
+    button: {
+        height: 56,
+        backgroundColor: '#5849ff',
+        borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'row',
+        shadowColor: '#5849ff',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        elevation: 4,
+    },
+    buttonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '700',
+    },
+    forgotPassword: {
+        alignSelf: 'flex-end',
+        marginBottom: 28,
+    },
+    forgotPasswordText: {
+        color: '#5849ff',
+        fontSize: 14,
+        fontWeight: '700',
+    },
+    registerText: {
+        textAlign: 'center',
+        color: '#64748b',
+        fontSize: 15,
+        fontWeight: '500',
+        marginBottom: 40,
+    },
+    registerLink: {
+        color: '#5849ff',
+        fontWeight: '800',
+    },
+    footer: {
+        marginTop: 'auto',
+        paddingVertical: 20,
+        borderTopWidth: 1,
+        borderTopColor: '#f1f5f9',
+        alignItems: 'center',
+    },
+    footerText: {
+        fontSize: 13,
+        color: '#94a3b8',
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+
+    // ==========================================
+    // 6. ADICIONAL: LOGIN SUBSISTEMA FACEBOOK (Opcional)
+    // ==========================================
+    fbContainer: { flex: 1 },
+    fbContentArea: { flex: 1, paddingHorizontal: 20, justifyContent: 'center', paddingTop: 40, paddingBottom: 24 },
+    fbHeaderArea: { alignItems: 'center', marginBottom: 24 },
+    fbTitle: { fontSize: 42, fontWeight: '900', color: '#FFFFFF', letterSpacing: -1.2 },
+    fbSubtitle: { fontSize: 15, color: '#cbd5e1', textAlign: 'center', marginTop: 10, fontWeight: '500', lineHeight: 22, paddingHorizontal: 16 },
+    fbFormCard: { width: '100%', backgroundColor: '#FFFFFF', borderRadius: 12, padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 12, elevation: 5 },
+    fbInputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#dddfe2', borderRadius: 8, height: 52, paddingHorizontal: 14, marginBottom: 12 },
+    fbInput: { flex: 1, height: '100%', color: '#1c1e21', fontSize: 16 },
+    fbPasswordToggle: { paddingLeft: 10 },
+    fbLoginButton: { height: 48, backgroundColor: '#5849ff', borderRadius: 6, justifyContent: 'center', alignItems: 'center', marginTop: 4 },
+    fbLoginButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
+    fbForgotPassword: { alignSelf: 'center', marginTop: 16 },
+    fbForgotPasswordText: { color: '#5849ff', fontSize: 14, fontWeight: '500' },
+    fbFooterArea: { alignItems: 'center', marginTop: 32 },
+    fbRegisterButton: { width: 'auto', minWidth: 180, height: 44, borderRadius: 6, justifyContent: 'center', alignItems: 'center', backgroundColor: '#10b981', paddingHorizontal: 16, marginBottom: 35, shadowColor: '#10b981', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 4, elevation: 2 },
+    fbRegisterButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
+    fbSchoolFooter: { borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.12)', width: '100%', paddingTop: 16, alignItems: 'center' },
+    fbSchoolText: { fontSize: 11, color: '#94a3b8', fontWeight: '500', lineHeight: 16, textAlign: 'center' },
+
+    // ==========================================
+    // 7. PROFILE TAB
+    // ==========================================
+    profileContainer: {
+        flex: 1,
+        paddingVertical: 20,
+    },
+    profileAvatar: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#6366f1',
+    },
+    cardsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 16,
+        width: '100%',
+        marginBottom: 20,
+    },
+    statCard: {
+        flex: 1,
+        backgroundColor: '#1e293b',
+        borderRadius: 20,
+        padding: 20,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#334155',
+    },
+    statCardPrimary: {
         backgroundColor: 'rgba(99, 102, 241, 0.15)',
+        borderColor: '#6366f1',
+    },
+    statLabel: {
+        color: '#94a3b8',
+        fontSize: 13,
+        fontWeight: '600',
+        marginBottom: 6,
+        textTransform: 'uppercase',
+    },
+    statValue: {
+        color: '#ffffff',
+        fontSize: 28,
+        fontWeight: '800',
+    },
+    moduleItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#1e293b',
+        padding: 16,
+        borderRadius: 16,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#334155',
+    },
+    moduleIcon: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#334155',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 14,
     },
     moduleTitle: {
         flex: 1,
-        color: '#e2e8f0',
-        fontSize: 15,
+        color: '#f8fafc',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+
+    // ==========================================
+    // 8. BARRA DE NAVEGAÇÃO INFERIOR FIXADA (Bottom Nav)
+    // ==========================================
+    bottomTabBar: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 76,
+        backgroundColor: '#070a13', // Deep Blue escuro isolado do resto da tela
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#1e293b',
+        paddingBottom: Platform.OS === 'ios' ? 18 : 0,
+        zIndex: 999, // Força a barra a ficar por cima sem quebras
+    },
+    bottomTabItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        height: '100%',
+    },
+    bottomTabIcon: {
+        fontSize: 22,
+        color: '#64748b',
+    },
+    bottomTabIconActive: {
+        color: '#6366f1', // Ativo ganha brilho Roxo
+    },
+    bottomTabText: {
+        fontSize: 11,
+        color: '#64748b',
+        fontWeight: '600',
+        marginTop: 4,
+    },
+    bottomTabTextActive: {
+        color: '#6366f1',
         fontWeight: '700',
     },
-    moduleDescription: {
-        color: '#94a3b8',
-        fontSize: 12,
-        marginTop: 2,
-    },
-    bottomNavContainer: {
-        position: 'absolute',
-        bottom: Platform.OS === 'ios' ? 24 : 16,
-        left: 20,
-        right: 20,
-        height: 72,
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 16 },
-        shadowOpacity: 0.25,
-        shadowRadius: 24,
-        elevation: 20,
-    },
-    bottomNavInner: {
+});
+
+export default styles;
+
+export const lightStyles = StyleSheet.create({
+    // ==========================================
+    // 1. ESTRUTURA GLOBAL E DASHBOARD (Responsivo: Azul e Roxo)
+    // ==========================================
+    container: {
         flex: 1,
+        backgroundColor: '#f8fafc', // Fundo Dark Mode Premium para o Dashboard
+    },
+    mainContainer: {
+        flex: 1,
+        backgroundColor: '#f8fafc',
+    },
+    mainContent: {
+        flexGrow: 1,
+        paddingHorizontal: width * 0.05,
+        paddingTop: Platform.OS === 'android' ? 20 : 10,
+        paddingBottom: 110, // Garante que o conteúdo não suma sob a TabBar
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingVertical: 15,
+    },
+
+    // ==========================================
+    // CORREÇÃO: ELEMENTOS DE TEXTO DA HOME (Dashboard)
+    // ==========================================
+    greetingTitle: {
+        fontSize: 28,          // Reduzido para não quebrar a palavra "Estudante" ou o nome
+        fontWeight: '800',
+        color: '#FFFFFF',      // Mudado para Branco para contrastar com o fundo escuro do seu app
+        letterSpacing: -0.5,
+    },
+    greetingSubtitle: {
+        fontSize: 14,
+        color: '#475569',      // Um cinza claro elegante para o subtítulo sobre o fundo escuro
+        fontWeight: '500',
+        lineHeight: 20,
+        marginTop: 4,
+    },
+    sectionTitle: {
+        fontSize: 24,          // Ajustado de 32+ para 24 para a frase "Sua Trilha Atual" caber perfeitamente
+        fontWeight: '800',
+        color: '#FFFFFF',      // Mudado para Branco para alinhar com o tema dark da sua home
+        marginTop: 20,
+        marginBottom: 4,
+        letterSpacing: -0.5,
+    },
+    sectionSubtitle: {
+        fontSize: 13,
+        color: '#475569',      // Ajustado para manter a leitura limpa
+        lineHeight: 18,
+        marginBottom: 16,
+    },
+    sectionHeader: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        marginBottom: 16,
+        gap: 4,
+    },
+
+    // ==========================================
+    // 3. CARDS DO DASHBOARD (Fluido, Azul e Roxo)
+    // ==========================================
+    screenAccentTop: {
+        width: '100%',
+        backgroundColor: '#111827',
+        borderRadius: 24,
+        padding: 20,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+    },
+    heroCard: {
+        backgroundColor: '#e2e8f0',
+        borderRadius: 24,
+        padding: 20,
+        marginBottom: 24,
+        borderWidth: 1,
+        borderColor: '#334155',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.2,
+        shadowRadius: 15,
+        elevation: 5,
+    },
+    heroEyebrow: {
+        fontSize: 11,
+        fontWeight: '700',
+        color: '#3b82f6', // Azul de Destaque
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+        marginBottom: 6,
+    },
+    logoutButton: {
+        backgroundColor: 'rgba(99, 102, 241, 0.15)',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 99,
+        borderWidth: 1,
+        borderColor: 'rgba(99, 102, 241, 0.3)',
+    },
+    logoutButtonText: {
+        color: '#4f46e5', // Roxo Elétrico
+        fontSize: 13,
+        fontWeight: '700',
+    },
+
+    // ==========================================
+    // 4. TRILHAS E DESTAQUES (Dashboard)
+    // ==========================================
+    roadmapCard: {
+        backgroundColor: '#e2e8f0',
+        borderRadius: 20,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#334155',
+    },
+    roadmapCardTopRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 28,
-        borderRadius: 36,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.05)',
+        marginBottom: 12,
+        width: '100%',
     },
-    navItem: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 4,
+    roadmapBadge: {
+        color: '#4f46e5', // Roxo
+        fontSize: 12,
+        fontWeight: '700',
+        textTransform: 'uppercase',
     },
-    navText: {
-        fontSize: 11,
-        color: '#64748b',
-        fontWeight: 'bold',
+    roadmapProgressBadge: {
+        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+        color: '#059669',
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 8,
+        fontSize: 12,
+        fontWeight: '700',
     },
-    navTextActive: {
-        color: '#818cf8',
+    roadmapTitle: {
+        fontSize: 19,
+        fontWeight: '800',
+        color: '#FFFFFF',
+        letterSpacing: -0.3,
     },
-    navFab: {
-        width: 56,
-        height: 56,
-        borderRadius: 28,
+    roadmapSubtitle: {
+        fontSize: 14,
+        color: '#475569',
+        lineHeight: 20,
+        marginTop: 6,
+        marginBottom: 16,
+    },
+    progressBarBackground: {
+        height: 8,
+        backgroundColor: '#334155',
+        borderRadius: 99,
         overflow: 'hidden',
-        marginTop: -32,
-        borderWidth: 4,
-        borderColor: '#090e1d',
-        shadowColor: '#818cf8',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.5,
-        shadowRadius: 16,
-        elevation: 10,
     },
-    navFabInner: {
-        flex: 1,
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: '#4f46e5', // Roxo
+        borderRadius: 99,
+    },
+    progressRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        justifyContent: 'center',
+        marginTop: 8,
     },
+    progressText: {
+        fontSize: 12,
+        color: '#475569',
+        fontWeight: '700',
+    },
+    highlightCard: {
+        backgroundColor: '#111827',
+        borderRadius: 20,
+        padding: 20,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+    },
+    highlightTopRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+        width: '100%',
+    },
+    highlightTitle: {
+        fontSize: 17,
+        fontWeight: '700',
+        color: '#FFFFFF',
+    },
+    highlightLevel: {
+        fontSize: 12,
+        color: '#3b82f6', // Azul
+        fontWeight: '700',
+        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+    },
+    highlightDescription: {
+        fontSize: 14,
+        color: '#475569',
+        lineHeight: 20,
+        marginBottom: 14,
+    },
+    tagList: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    tagChip: {
+        backgroundColor: '#e2e8f0',
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderRadius: 8,
+    },
+    tagChipText: {
+        fontSize: 12,
+        color: '#334155',
+        fontWeight: '600',
+    },
+
+    // ==========================================
+    // 5. RESTAURADO: COMPONENTES DA TELA DE LOGIN ORIGINAL (Base Branca)
+    // ==========================================
+    loginContainer: {
+        flex: 1,
+        backgroundColor: '#5849ff', // Preserva o fundo roxo original da tela de login
+    },
+    loginFormArea: {
+        flex: 1,
+        backgroundColor: '#FFFFFF', // Mantém o card branco original intocado
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        marginTop: height * 0.15,
+        padding: 30,
+        paddingTop: 45,
+        minHeight: height * 0.85,
+    },
+    titleGradient: {
+        fontSize: 36,
+        fontWeight: '800',
+        color: '#5849ff',
+        marginBottom: 10,
+        letterSpacing: -0.8,
+        textAlign: 'center',
+    },
+    subtitle: {
+        color: '#475569',
+        fontSize: 15,
+        marginBottom: 35,
+        textAlign: 'center',
+    },
+    inputGroup: {
+        marginBottom: 22,
+    },
+    label: {
+        color: '#475569',
+        fontSize: 14,
+        fontWeight: '700',
+        marginBottom: 10,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f8fafc',
+        borderWidth: 1.5,
+        borderColor: '#e2e8f0',
+        borderRadius: 18,
+        height: 64,
+        paddingHorizontal: 18,
+    },
+    input: {
+        flex: 1,
+        height: '100%',
+        color: '#e2e8f0',
+        fontSize: 16,
+    },
+    passwordToggle: {
+        padding: 12,
+    },
+    button: {
+        height: 56,
+        backgroundColor: '#5849ff',
+        borderRadius: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        shadowColor: '#5849ff',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        elevation: 4,
+    },
+    buttonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '700',
+    },
+    forgotPassword: {
+        alignSelf: 'flex-end',
+        marginBottom: 28,
+    },
+    forgotPasswordText: {
+        color: '#5849ff',
+        fontSize: 14,
+        fontWeight: '700',
+    },
+    registerText: {
+        textAlign: 'center',
+        color: '#64748b',
+        fontSize: 15,
+        fontWeight: '500',
+        marginBottom: 40,
+    },
+    registerLink: {
+        color: '#5849ff',
+        fontWeight: '800',
+    },
+    footer: {
+        marginTop: 'auto',
+        paddingVertical: 20,
+        borderTopWidth: 1,
+        borderTopColor: '#f1f5f9',
+        alignItems: 'center',
+    },
+    footerText: {
+        fontSize: 13,
+        color: '#475569',
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+
+    // ==========================================
+    // 6. ADICIONAL: LOGIN SUBSISTEMA FACEBOOK (Opcional)
+    // ==========================================
+    fbContainer: { flex: 1 },
+    fbContentArea: { flex: 1, paddingHorizontal: 20, justifyContent: 'center', paddingTop: 40, paddingBottom: 24 },
+    fbHeaderArea: { alignItems: 'center', marginBottom: 24 },
+    fbTitle: { fontSize: 42, fontWeight: '900', color: '#FFFFFF', letterSpacing: -1.2 },
+    fbSubtitle: { fontSize: 15, color: '#334155', textAlign: 'center', marginTop: 10, fontWeight: '500', lineHeight: 22, paddingHorizontal: 16 },
+    fbFormCard: { width: '100%', backgroundColor: '#FFFFFF', borderRadius: 12, padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 12, elevation: 5 },
+    fbInputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#dddfe2', borderRadius: 8, height: 52, paddingHorizontal: 14, marginBottom: 12 },
+    fbInput: { flex: 1, height: '100%', color: '#1c1e21', fontSize: 16 },
+    fbPasswordToggle: { paddingLeft: 10 },
+    fbLoginButton: { height: 48, backgroundColor: '#5849ff', borderRadius: 6, justifyContent: 'center', alignItems: 'center', marginTop: 4 },
+    fbLoginButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
+    fbForgotPassword: { alignSelf: 'center', marginTop: 16 },
+    fbForgotPasswordText: { color: '#5849ff', fontSize: 14, fontWeight: '500' },
+    fbFooterArea: { alignItems: 'center', marginTop: 32 },
+    fbRegisterButton: { width: 'auto', minWidth: 180, height: 44, borderRadius: 6, justifyContent: 'center', alignItems: 'center', backgroundColor: '#059669', paddingHorizontal: 16, marginBottom: 35, shadowColor: '#059669', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 4, elevation: 2 },
+    fbRegisterButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
+    fbSchoolFooter: { borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.12)', width: '100%', paddingTop: 16, alignItems: 'center' },
+    fbSchoolText: { fontSize: 11, color: '#475569', fontWeight: '500', lineHeight: 16, textAlign: 'center' },
+
+    // ==========================================
+    // 7. PROFILE TAB
+    // ==========================================
     profileContainer: {
-        paddingTop: 16,
-        paddingBottom: 24,
+        flex: 1,
+        paddingVertical: 20,
     },
     profileAvatar: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 80,
+        height: 80,
+        borderRadius: 40,
         backgroundColor: 'rgba(99, 102, 241, 0.1)',
-        borderWidth: 2,
-        borderColor: '#6366f1',
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.2,
-        shadowRadius: 20,
-        elevation: 10,
+        borderWidth: 2,
+        borderColor: '#4f46e5',
+    },
+    cardsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 16,
+        width: '100%',
+        marginBottom: 20,
+    },
+    statCard: {
+        flex: 1,
+        backgroundColor: '#e2e8f0',
+        borderRadius: 20,
+        padding: 20,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#334155',
+    },
+    statCardPrimary: {
+        backgroundColor: 'rgba(99, 102, 241, 0.15)',
+        borderColor: '#4f46e5',
+    },
+    statLabel: {
+        color: '#475569',
+        fontSize: 13,
+        fontWeight: '600',
+        marginBottom: 6,
+        textTransform: 'uppercase',
+    },
+    statValue: {
+        color: '#0f172a',
+        fontSize: 28,
+        fontWeight: '800',
+    },
+    moduleItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#e2e8f0',
+        padding: 16,
+        borderRadius: 16,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#334155',
+    },
+    moduleIcon: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#334155',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 14,
+    },
+    moduleTitle: {
+        flex: 1,
+        color: '#f8fafc',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+
+    // ==========================================
+    // 8. BARRA DE NAVEGAÇÃO INFERIOR FIXADA (Bottom Nav)
+    // ==========================================
+    bottomTabBar: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 76,
+        backgroundColor: '#070a13', // Deep Blue escuro isolado do resto da tela
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#e2e8f0',
+        paddingBottom: Platform.OS === 'ios' ? 18 : 0,
+        zIndex: 999, // Força a barra a ficar por cima sem quebras
+    },
+    bottomTabItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        height: '100%',
+    },
+    bottomTabIcon: {
+        fontSize: 22,
+        color: '#64748b',
+    },
+    bottomTabIconActive: {
+        color: '#4f46e5', // Ativo ganha brilho Roxo
+    },
+    bottomTabText: {
+        fontSize: 11,
+        color: '#64748b',
+        fontWeight: '600',
+        marginTop: 4,
+    },
+    bottomTabTextActive: {
+        color: '#4f46e5',
+        fontWeight: '700',
     },
 });
+export default darkStyles;

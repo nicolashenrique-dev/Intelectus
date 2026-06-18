@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl, Dimensions } from 'react-native';
-import styles from '../../styles/estilos';
+import { darkStyles, lightStyles } from '../../styles/estilos';
+import { useTheme } from '../../contexts/ThemeContext';
 import { getBaseUrl } from '../../utils';
 import { useFocusEffect } from '@react-navigation/native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import ProfileTab from './ProfileTab';
 
 const Principal = ({ navigation, route }) => {
+    const { isDarkMode } = useTheme();
+    const styles = isDarkMode ? darkStyles : lightStyles;
   const [loading, setLoading] = useState(true);
   const [trilhaAtual, setTrilhaAtual] = useState(null);
-  const [destaques, setDestaques] = useState([]);
+  const [destaques, setDestaques] = useState([]); // CORRIGIDO: de destaQUES para destaques
   const [refreshing, setRefreshing] = useState(false);
   const [abaAtual, setAbaAtual] = useState('Home');
 
@@ -22,7 +26,7 @@ const Principal = ({ navigation, route }) => {
       const baseUrl = getBaseUrl();
 
       // Buscar trilha do usuário
-      const resTrilha = await fetch(`${baseUrl}/api/roadmap/user/${uid}`);
+      const resTrilha = await fetch(`${baseUrl}/api/trilhas/usuario/${uid}`);
       const dataTrilha = await resTrilha.json();
       if (dataTrilha.success) setTrilhaAtual(dataTrilha.roadmap);
       else setTrilhaAtual(null);
@@ -82,8 +86,11 @@ const Principal = ({ navigation, route }) => {
                 <Text style={styles.greetingTitle}>Olá, Estudante!</Text>
                 <Text style={styles.greetingSubtitle}>Pronto para continuar seus estudos?</Text>
               </View>
-              <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.logoutButtonText}>Sair</Text>
+              <TouchableOpacity
+                style={[styles.profileAvatar, { width: 48, height: 48, borderRadius: 24 }]}
+                onPress={() => setAbaAtual('Profile')}
+              >
+                <Feather name="user" size={24} color="#818cf8" />
               </TouchableOpacity>
             </View>
 
@@ -164,70 +171,35 @@ const Principal = ({ navigation, route }) => {
             </View>
           </View>
         ) : abaAtual === 'Profile' ? (
-          <View style={styles.profileContainer}>
-            <View style={{ alignItems: 'center', marginBottom: 32 }}>
-              <View style={styles.profileAvatar}>
-                <Feather name="user" size={40} color="#818cf8" />
-              </View>
-              <Text style={{ color: '#fff', fontSize: 24, fontWeight: '900', marginTop: 16 }}>Estudante Intelectus</Text>
-              <Text style={{ color: '#94a3b8', fontSize: 15, marginTop: 4 }}>Plano Iniciante</Text>
-            </View>
-
-            <View style={styles.cardsRow}>
-              <View style={styles.statCard}>
-                <Text style={styles.statLabel}>Módulos</Text>
-                <Text style={styles.statValue}>{trilhaAtual?.nodes?.length || 0}</Text>
-              </View>
-              <View style={[styles.statCard, styles.statCardPrimary]}>
-                <Text style={styles.statLabel}>Progresso</Text>
-                <Text style={styles.statValue}>{calculateProgress(trilhaAtual)}%</Text>
-              </View>
-            </View>
-
-            <View style={[styles.section, { marginTop: 12 }]}>
-              <Text style={styles.sectionTitle}>Configurações</Text>
-
-              <TouchableOpacity style={styles.moduleItem}>
-                <View style={styles.moduleIcon}><Feather name="settings" size={20} color="#cbd5e1" /></View>
-                <Text style={styles.moduleTitle}>Preferências</Text>
-                <Feather name="chevron-right" size={20} color="#cbd5e1" />
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.moduleItem}>
-                <View style={[styles.moduleIcon, { backgroundColor: 'rgba(239, 68, 68, 0.1)' }]}><Feather name="log-out" size={20} color="#ef4444" /></View>
-                <Text style={[styles.moduleTitle, { color: '#ef4444' }]}>Sair da Conta</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <ProfileTab
+            trilhaAtual={trilhaAtual}
+            calculateProgress={calculateProgress}
+            navigation={navigation}
+          />
         ) : null}
 
         <View style={{ height: 100 }} />
       </ScrollView>
 
-      {/* Floating Bottom Navigation */}
-      <View style={styles.bottomNavContainer}>
-        <LinearGradient
-          colors={['rgba(15, 23, 42, 0.95)', 'rgba(5, 8, 16, 0.98)']}
-          style={styles.bottomNavInner}
-        >
-          <TouchableOpacity style={styles.navItem} onPress={() => setAbaAtual('Home')}>
-            <Feather name="home" size={24} color={abaAtual === 'Home' ? '#818cf8' : '#64748b'} />
-            <Text style={[styles.navText, abaAtual === 'Home' && styles.navTextActive]}>Home</Text>
-          </TouchableOpacity>
+      {/* PARTE DE BAIXO RESPONSIVA CONSERVADA */}
+      <View style={styles.bottomTabBar}>
+        <TouchableOpacity style={styles.bottomTabItem} onPress={() => setAbaAtual('Home')}>
+          <Feather name="home" size={24} color={abaAtual === 'Home' ? '#818cf8' : '#64748b'} />
+          <Text style={[styles.bottomTabText, abaAtual === 'Home' && styles.bottomTabTextActive]}>Home</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Quiz', { uid })}>
-            <View style={styles.navFab}>
-              <LinearGradient colors={['#818cf8', '#4f46e5']} style={styles.navFabInner}>
-                <Feather name="plus" size={28} color="#fff" />
-              </LinearGradient>
-            </View>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomTabItem} onPress={() => navigation.navigate('Quiz', { uid })}>
+          <View style={{ width: 48, height: 48, borderRadius: 24, overflow: 'hidden' }}>
+            <LinearGradient colors={['#818cf8', '#4f46e5']} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Feather name="plus" size={28} color="#fff" />
+            </LinearGradient>
+          </View>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navItem} onPress={() => setAbaAtual('Profile')}>
-            <Feather name="user" size={24} color={abaAtual === 'Profile' ? '#818cf8' : '#64748b'} />
-            <Text style={[styles.navText, abaAtual === 'Profile' && styles.navTextActive]}>Perfil</Text>
-          </TouchableOpacity>
-        </LinearGradient>
+        <TouchableOpacity style={styles.bottomTabItem} onPress={() => setAbaAtual('Profile')}>
+          <Feather name="user" size={24} color={abaAtual === 'Profile' ? '#818cf8' : '#64748b'} />
+          <Text style={[styles.bottomTabText, abaAtual === 'Profile' && styles.bottomTabTextActive]}>Perfil</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

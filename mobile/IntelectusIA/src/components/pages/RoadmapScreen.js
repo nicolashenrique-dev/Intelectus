@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Modal, Image, ActivityIndicator, Linking } from 'react-native';
-import styles from '../../styles/estilos';
+import { darkStyles, lightStyles } from '../../styles/estilos';
+import { useTheme } from '../../contexts/ThemeContext';
 import { getBaseUrl } from '../../utils';
 import { Ionicons } from '@expo/vector-icons';
 
 const RoadmapScreen = ({ route, navigation }) => {
+    const { isDarkMode } = useTheme();
+    const styles = isDarkMode ? darkStyles : lightStyles;
     const { roadmap: initialRoadmap, uid } = route.params || {};
     const [roadmap, setRoadmap] = useState(initialRoadmap);
     const [selectedNode, setSelectedNode] = useState(null);
@@ -19,13 +22,16 @@ const RoadmapScreen = ({ route, navigation }) => {
     }, [uid]);
 
     const fetchUserRoadmap = async (userId) => {
+        setLoading(true);
         try {
             const baseUrl = getBaseUrl();
-            const response = await fetch(`${baseUrl}/api/roadmap/user/${userId}`);
+            const response = await fetch(`${baseUrl}/api/trilhas/usuario/${userId}`);
             const data = await response.json();
             if (data.success) setRoadmap(data.roadmap);
         } catch (err) {
             console.error("Erro ao buscar roadmap:", err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -54,10 +60,10 @@ const RoadmapScreen = ({ route, navigation }) => {
         setUpdating(true);
         try {
             const baseUrl = getBaseUrl();
-            const response = await fetch(`${baseUrl}/api/roadmap/node/${nodeId}`, {
+            const response = await fetch(`${baseUrl}/api/trilhas/no/${nodeId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus, uid: uid || 'mock-uid' }) // Fallback mock uid
+                body: JSON.stringify({ status: newStatus, uid: uid || 'mock-uid' })
             });
             const data = await response.json();
             if (data.success) {

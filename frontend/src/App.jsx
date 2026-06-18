@@ -8,6 +8,11 @@ import Roadmap from './pages/Roadmap'
 import PaginaIA from './pages/PaginaIA'
 
 function App() {
+    React.useEffect(() => {
+        const t = localStorage.getItem('intelectus_theme') || 'dark';
+        document.body.className = `theme-${t}`;
+    }, []);
+
     return (
         <Router>
             <Routes>

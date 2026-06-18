@@ -5,8 +5,11 @@ import LoginScreen from './src/components/pages/LoginScreen';
 import Principal from './src/components/pages/Principal';
 import QuizScreen from './src/components/pages/QuizScreen';
 import RoadmapScreen from './src/components/pages/RoadmapScreen';
+import ProfileTab from './src/components/pages/ProfileTab';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import { ThemeProvider } from './src/contexts/ThemeContext';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -33,19 +36,22 @@ function MainDrawer() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: '#090e1d' }
-        }}
-      >
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Dashboard" component={MainDrawer} />
-        <Stack.Screen name="Quiz" component={QuizScreen} />
-        <Stack.Screen name="Roadmap" component={RoadmapScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: '#090e1d' }
+          }}
+        >
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Dashboard" component={MainDrawer} />
+          <Stack.Screen name="Quiz" component={QuizScreen} />
+          <Stack.Screen name="Roadmap" component={RoadmapScreen} />
+          <Stack.Screen name="Profile" component={ProfileTab} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }

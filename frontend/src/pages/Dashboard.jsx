@@ -1,12 +1,382 @@
 import React, { useEffect, useState } from 'react'
-import { LayoutDashboard, BookOpen, TrendingUp, Settings, Plus, LogOut, Bell } from 'lucide-react'
-import { auth, db } from '../firebase'
+import {
+    LayoutDashboard, BookOpen, TrendingUp, Settings, Plus,
+    LogOut, Bell, ArrowRight, Sparkles, BarChart2, Compass,
+    CheckCircle, Clock, Zap, Flame, ArrowUpRight, Minus, Play
+} from 'lucide-react'
+import { auth } from '../firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
+import MinhasTrilhasPage from './MinhasTrilhasPage'
+import ProgressoPage from './ProgressoPage'
+import Configuracao from './Configuracao'
 
+/* ─────────────────────────────────────────────
+   Tokens
+───────────────────────────────────────────── */
+const css = `
+  :root {
+    --indigo: #6366f1;
+    --indigo-dim: rgba(99,102,241,0.10);
+    --indigo-border: rgba(99,102,241,0.22);
+    --surface: rgba(255,255,255,0.025);
+    --surface-hover: rgba(255,255,255,0.045);
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.13);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #475569;
+    --bg: #060b18;
+    --sidebar-bg: #080e1d;
+    --card-bg: rgba(15,23,42,0.55);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  .dash-shell { display: flex; height: 100vh; overflow: hidden; background: var(--bg); color: var(--text-primary); font-family: system-ui, -apple-system, sans-serif; }
+
+  /* ── Sidebar ── */
+  .dash-sidebar {
+    width: 240px; flex-shrink: 0;
+    background: var(--sidebar-bg);
+    border-right: 0.5px solid var(--border);
+    display: flex; flex-direction: column;
+    padding: 24px 16px;
+    height: 100vh; overflow: hidden;
+  }
+  .dash-logo { display: flex; align-items: center; gap: 10px; padding: 0 4px; margin-bottom: 32px; }
+  .dash-logo-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--indigo);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .dash-logo-text { font-size: 17px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.3px; }
+
+  .dash-nav { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .dash-nav-section {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 16px 12px 6px;
+  }
+  .dash-nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: var(--radius-sm);
+    cursor: pointer; font-size: 13.5px; font-weight: 500;
+    color: var(--text-secondary);
+    transition: background .15s, color .15s;
+    border: 0.5px solid transparent;
+    user-select: none;
+  }
+  .dash-nav-item:hover { background: var(--surface); color: var(--text-primary); }
+  .dash-nav-item.active {
+    background: var(--indigo-dim); color: #a5b4fc;
+    border-color: var(--indigo-border);
+  }
+
+  .dash-sidebar-footer { padding-top: 16px; border-top: 0.5px solid var(--border); }
+  .dash-user-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--radius-sm); cursor: pointer;
+  }
+  .dash-user-row:hover { background: var(--surface); }
+  .dash-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--indigo-dim); border: 0.5px solid var(--indigo-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: #a5b4fc; flex-shrink: 0;
+  }
+  .dash-user-info { flex: 1; min-width: 0; }
+  .dash-user-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .dash-user-plan { font-size: 11px; color: var(--text-secondary); }
+  .dash-logout-btn {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: none; background: transparent; color: var(--text-muted);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: color .15s, background .15s;
+  }
+  .dash-logout-btn:hover { color: #f87171; background: rgba(239,68,68,0.1); }
+
+  /* ── Main ── */
+  .dash-main {
+    flex: 1; overflow-y: auto; padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 24px;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+
+  /* ── Topbar ── */
+  .dash-topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .dash-topbar h1 { font-size: 21px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.4px; margin-bottom: 2px; }
+  .dash-topbar p { font-size: 13px; color: var(--text-secondary); }
+  .dash-topbar-actions { display: flex; align-items: center; gap: 8px; }
+  .dash-icon-btn {
+    width: 36px; height: 36px; border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border); background: var(--surface);
+    color: var(--text-secondary); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; transition: background .15s, color .15s;
+  }
+  .dash-icon-btn:hover { background: var(--surface-hover); color: var(--text-primary); }
+  .dash-notif-dot {
+    position: absolute; top: 7px; right: 7px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #ef4444; border: 1.5px solid var(--bg);
+  }
+  .dash-cta-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 0 14px; height: 36px;
+    background: var(--indigo); border: none;
+    border-radius: var(--radius-sm);
+    color: #fff; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: opacity .15s;
+  }
+  .dash-cta-btn:hover { opacity: .88; }
+
+  /* ── Stats ── */
+  .dash-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .dash-stat-card {
+    background: var(--card-bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: border-color .15s;
+  }
+  .dash-stat-card:hover { border-color: var(--border-hover); }
+  .dash-stat-label {
+    font-size: 11.5px; font-weight: 500; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .06em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dash-stat-value { font-size: 26px; font-weight: 600; color: var(--text-primary); letter-spacing: -.5px; }
+  .dash-stat-delta { font-size: 12px; color: #34d399; display: flex; align-items: center; gap: 3px; }
+  .dash-stat-delta.neutral { color: var(--text-secondary); }
+
+  /* ── Two-col layout ── */
+  .dash-two-col { display: grid; grid-template-columns: 1fr 1.7fr; gap: 16px; }
+
+  /* ── Cards ── */
+  .dash-card {
+    background: var(--card-bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+    transition: border-color .15s;
+  }
+  .dash-card:hover { border-color: var(--border-hover); }
+  .dash-card.underway {
+    background: linear-gradient(135deg, rgba(99,102,241,.12) 0%, rgba(99,102,241,.04) 100%);
+    border-color: var(--indigo-border);
+  }
+  .dash-card.underway:hover { border-color: rgba(99,102,241,.4); }
+
+  .dash-card-eyebrow {
+    font-size: 10.5px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-muted);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .dash-card-header { display: flex; align-items: center; justify-content: space-between; }
+  .dash-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+  .dash-badge {
+    padding: 2px 8px; border-radius: 20px;
+    font-size: 10.5px; font-weight: 600;
+    background: var(--indigo-dim); border: 0.5px solid var(--indigo-border); color: #a5b4fc;
+  }
+  .dash-badge.green { background: rgba(52,211,153,.1); border-color: rgba(52,211,153,.25); color: #34d399; }
+  .dash-badge.amber { background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.25); color: #fbbf24; }
+  .dash-badge.slate { background: var(--surface); border-color: var(--border); color: var(--text-muted); }
+
+  .dash-trail-title { font-size: 17px; font-weight: 600; color: var(--text-primary); letter-spacing: -.3px; line-height: 1.35; }
+
+  .dash-node-list { display: flex; flex-direction: column; gap: 6px; }
+  .dash-node-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 9px 12px;
+    transition: background .13s;
+  }
+  .dash-node-row:hover { background: var(--surface-hover); }
+  .dash-node-name {
+    font-size: 13px; font-weight: 500; color: var(--text-primary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .dash-node-num { font-size: 12px; color: var(--text-muted); width: 16px; }
+
+  .dash-continue-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 10px;
+    background: rgba(99,102,241,.18); border: 0.5px solid rgba(99,102,241,.3);
+    border-radius: var(--radius-sm); color: #a5b4fc;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: background .15s;
+  }
+  .dash-continue-btn:hover { background: rgba(99,102,241,.28); }
+
+  /* ── Progress ring ── */
+  .dash-ring-wrap { display: flex; align-items: center; gap: 20px; }
+  .dash-ring-svg { transform: rotate(-90deg); }
+  .dash-skill-bars { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  .dash-skill-row { display: flex; flex-direction: column; gap: 4px; }
+  .dash-skill-meta { display: flex; justify-content: space-between; font-size: 12px; }
+  .dash-skill-name { color: var(--text-secondary); }
+  .dash-skill-pct { color: var(--text-muted); }
+  .dash-bar-track { height: 4px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .dash-bar-fill { height: 100%; border-radius: 10px; background: var(--indigo); transition: width .8s ease; }
+
+  /* ── Quick actions ── */
+  .dash-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .dash-section-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .dash-see-all { font-size: 12.5px; color: var(--indigo); background: none; border: none; cursor: pointer; font-family: inherit; }
+  .dash-see-all:hover { text-decoration: underline; }
+
+  .dash-quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .dash-qa-card {
+    background: var(--card-bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px; cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    transition: border-color .15s, background .15s;
+  }
+  .dash-qa-card:hover { border-color: var(--border-hover); background: var(--surface-hover); }
+  .dash-qa-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .dash-qa-icon.indigo { background: var(--indigo-dim); color: #a5b4fc; }
+  .dash-qa-icon.teal { background: rgba(45,212,191,.1); color: #2dd4bf; }
+  .dash-qa-icon.purple { background: rgba(167,139,250,.1); color: #a78bfa; }
+  .dash-qa-text { flex: 1; min-width: 0; }
+  .dash-qa-label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .dash-qa-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+
+  /* ── Highlights ── */
+  .dash-highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .dash-highlight-card {
+    background: var(--card-bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius); padding: 18px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: border-color .15s, transform .15s;
+  }
+  .dash-highlight-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+  .dash-hc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .dash-hc-title { font-size: 14px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+  .dash-tag-wrap { display: flex; gap: 4px; flex-wrap: wrap; }
+  .dash-tag {
+    font-size: 10.5px; font-weight: 500; padding: 2px 7px; border-radius: 4px;
+    background: var(--surface); border: 0.5px solid var(--border); color: var(--text-muted);
+  }
+  .dash-hc-bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+  .dash-hc-meta { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-muted); }
+  .dash-hc-track { height: 3px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .dash-hc-fill { height: 100%; border-radius: 10px; }
+
+  /* ── Empty state ── */
+  .dash-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 48px 24px; gap: 12px;
+  }
+  .dash-empty-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--indigo-dim); display: flex; align-items: center; justify-content: center;
+    color: #a5b4fc; margin-bottom: 4px;
+  }
+  .dash-empty h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+  .dash-empty p { font-size: 13px; color: var(--text-secondary); max-width: 320px; line-height: 1.6; }
+
+  /* ── Loading spinner ── */
+  .dash-spinner {
+    width: 20px; height: 20px; border: 2px solid var(--indigo-border);
+    border-top-color: var(--indigo); border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .dash-loading-row { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 13px; padding: 24px 0; }
+`
+
+/* ─────────────────────────────────────────────
+   Sub-components
+───────────────────────────────────────────── */
+const NavItem = ({ icon, label, active, onClick }) => (
+    <div className={`dash-nav-item${active ? ' active' : ''}`} onClick={onClick} role="button" tabIndex={0}>
+        {icon}
+        <span>{label}</span>
+    </div>
+)
+
+const Badge = ({ children, variant = '' }) => (
+    <span className={`dash-badge${variant ? ' ' + variant : ''}`}>{children}</span>
+)
+
+const StatCard = ({ icon, label, value, delta, neutral }) => (
+    <div className="dash-stat-card">
+        <div className="dash-stat-label">{icon}<span>{label}</span></div>
+        <div className="dash-stat-value">{value}</div>
+        <div className={`dash-stat-delta${neutral ? ' neutral' : ''}`}>
+            {neutral ? <Minus size={12} /> : <ArrowUpRight size={12} />}
+            <span>{delta}</span>
+        </div>
+    </div>
+)
+
+const NodeStatus = ({ status }) => {
+    const map = {
+        completed: { label: 'Concluído', variant: 'green' },
+        in_progress: { label: 'Em andamento', variant: 'amber' },
+        locked: { label: 'Bloqueado', variant: 'slate' },
+    }
+    const s = map[status] || map.locked
+    return <Badge variant={s.variant}>{s.label}</Badge>
+}
+
+const SkillBar = ({ label, pct, color }) => (
+    <div className="dash-skill-row">
+        <div className="dash-skill-meta">
+            <span className="dash-skill-name">{label}</span>
+            <span className="dash-skill-pct">{pct}%</span>
+        </div>
+        <div className="dash-bar-track">
+            <div className="dash-bar-fill" style={{ width: `${pct}%`, background: color || 'var(--indigo)' }} />
+        </div>
+    </div>
+)
+
+const ProgressRing = ({ pct }) => {
+    const r = 32
+    const circ = 2 * Math.PI * r
+    const offset = circ * (1 - pct / 100)
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+            <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
+                <circle cx="36" cy="36" r={r} fill="none" stroke="var(--border)" strokeWidth="7" />
+                <circle
+                    cx="36" cy="36" r={r} fill="none"
+                    stroke="var(--indigo)" strokeWidth="7"
+                    strokeLinecap="round"
+                    strokeDasharray={circ}
+                    strokeDashoffset={offset}
+                    style={{ transition: 'stroke-dashoffset .8s ease' }}
+                />
+            </svg>
+            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>geral</span>
+        </div>
+    )
+}
+
+const EmptyState = ({ title, description, action }) => (
+    <div className="dash-empty">
+        <div className="dash-empty-icon"><BookOpen size={24} /></div>
+        <h2>{title}</h2>
+        <p>{description}</p>
+        {action}
+    </div>
+)
+
+/* ── NOVA ABA: Minhas Trilhas Content ── */
+
+
+/* ─────────────────────────────────────────────
+   Main Dashboard
+───────────────────────────────────────────── */
 const Dashboard = () => {
     const navigate = useNavigate()
+    const [user, setUser] = useState(null)
     const [roadmap, setRoadmap] = useState(null)
     const [loadingRoadmap, setLoadingRoadmap] = useState(true)
     const [destaques, setDestaques] = useState([])
@@ -14,32 +384,24 @@ const Dashboard = () => {
     const [abaAtual, setAbaAtual] = useState('Dashboard')
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                navigate('/login')
-                return
-            }
-            fetchRoadmap(user.uid)
+        const unsub = onAuthStateChanged(auth, (u) => {
+            if (!u) { navigate('/login'); return }
+            setUser(u)
+            fetchRoadmap(u.uid)
             fetchHighlights()
         })
-
-        return () => unsubscribe()
+        return () => unsub()
     }, [navigate])
 
     const fetchRoadmap = async (uid) => {
         setLoadingRoadmap(true)
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
-            const response = await fetch(`${apiUrl}/roadmap/user/${uid}`)
-            const data = await response.json()
-
-            if (data.success && data.roadmap) {
-                setRoadmap(data.roadmap)
-            } else {
-                setRoadmap(null)
-            }
+            const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+            const res = await fetch(`${api}/roadmap/user/${uid}`)
+            const data = await res.json()
+            setRoadmap(data.success && data.roadmap ? data.roadmap : null)
         } catch (err) {
-            console.error('Erro ao carregar trilha da API:', err)
+            console.error('Erro ao carregar trilha:', err)
             setRoadmap(null)
         } finally {
             setLoadingRoadmap(false)
@@ -49,34 +411,14 @@ const Dashboard = () => {
     const fetchHighlights = async () => {
         setLoadingDestaques(true)
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
-            const response = await fetch(`${apiUrl}/itens/destaques`)
-            const data = await response.json()
-
-            if (data.success && data.destaques) {
-                setDestaques(data.destaques)
-            }
+            const api = import.meta.env.VITE_API_URL || 'https://projeto-9ccub6pb4-ornicolas-projects.vercel.app'
+            const res = await fetch(`${api}/itens/destaques`)
+            const data = await res.json()
+            setDestaques(data.success && data.destaques ? data.destaques : [])
         } catch (err) {
             console.error('Erro ao carregar destaques:', err)
         } finally {
             setLoadingDestaques(false)
-        }
-    }
-
-    const handleAdoptHighlight = async (id) => {
-        try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
-            const response = await fetch(`${apiUrl}/roadmap/${id}`)
-            const data = await response.json()
-
-            if (data.success && data.roadmap) {
-                // Fetch to generate but passing the hardcoded profile/nodes
-                // Since our backend doesn't have an "adopt" route yet, and the web app 
-                // is restricted, we'll navigate to the quiz instead to let them create a new one.
-                navigate('/quiz')
-            }
-        } catch (err) {
-            console.error('Erro ao adotar destaque:', err)
         }
     }
 
@@ -85,200 +427,265 @@ const Dashboard = () => {
         navigate('/login')
     }
 
+    const initials = user?.displayName
+        ? user.displayName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
+        : 'EU'
+
+    const firstName = user?.displayName?.split(' ')[0] || 'de volta'
+
+    const barColors = ['var(--indigo)', '#2dd4bf', '#a78bfa', '#f59e0b']
+
     return (
-        <div className="dashboard-layout relative bg-[#050810] text-white overflow-hidden min-h-screen">
-            {/* Ambient Backgrounds */}
-            <div className="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="fixed bottom-[-10%] right-[-10%] w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
-
-            {/* Sidebar */}
-            <aside className="dashboard-sidebar relative z-10 bg-[#0f172a]/60 backdrop-blur-2xl border-r border-white/5 shadow-2xl flex flex-col p-6 h-screen sticky top-0">
-                <div className="flex items-center gap-3 mb-12 px-2">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg shadow-indigo-500/20 flex items-center justify-center">
-                        <BookOpen size={20} className="text-white" />
-                    </div>
-                    <span className="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">Intelectus</span>
-                </div>
-
-                <nav className="flex-1 space-y-3 pb-8">
-                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" active={abaAtual === 'Dashboard'} onClick={() => setAbaAtual('Dashboard')} />
-                    <NavItem icon={<BookOpen size={20} />} label="Minhas Trilhas" active={abaAtual === 'Minhas Trilhas'} onClick={() => setAbaAtual('Minhas Trilhas')} />
-                    <NavItem icon={<TrendingUp size={20} />} label="Progresso" active={abaAtual === 'Progresso'} onClick={() => setAbaAtual('Progresso')} />
-                    <NavItem icon={<Settings size={20} />} label="Configurações" active={abaAtual === 'Configurações'} onClick={() => setAbaAtual('Configurações')} />
-                </nav>
-
-                <button
-                    onClick={handleLogout}
-                    className="mt-auto flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-white/[0.03] hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/5 hover:border-red-500/20 transition-all font-semibold"
-                >
-                    <LogOut size={20} />
-                    <span>Sair</span>
-                </button>
-            </aside>
-
-            {/* Main Content */}
-            <main className="dashboard-main relative z-10 p-6 md:p-10 overflow-y-auto flex-1">
-                <div className="flex flex-col gap-10 mb-12">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <h1 className="text-4xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 tracking-tight">Bem-vindo de volta!</h1>
-                            <p className="text-slate-400 text-lg">Continue sua jornada de aprendizado personalizada.</p>
+        <>
+            <style>{css}</style>
+            <div className="dash-shell">
+                {/* ── SIDEBAR ── */}
+                <aside className="dash-sidebar">
+                    <div className="dash-logo">
+                        <div className="dash-logo-icon">
+                            <BookOpen size={17} color="#fff" />
                         </div>
-                        <button
-                            type="button"
-                            className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors relative"
-                            aria-label="Notificações"
-                        >
-                            <Bell size={20} className="text-slate-300" />
-                            <span className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-[#0f172a]"></span>
-                        </button>
+                        <span className="dash-logo-text">Intellectus</span>
                     </div>
 
-                    <div className="flex flex-col xl:flex-row gap-6">
-                        <div className="flex flex-col justify-center items-start bg-indigo-600/10 backdrop-blur-sm border border-indigo-500/20 rounded-3xl p-8 xl:w-1/3 shadow-lg hover:border-indigo-500/40 transition-all">
-                            <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 text-indigo-400">
-                                <Plus size={30} />
+                    <nav className="dash-nav">
+                        <span className="dash-nav-section">Menu</span>
+                        {[
+                            { icon: <LayoutDashboard size={17} />, label: 'Dashboard' },
+                            { icon: <BookOpen size={17} />, label: 'Minhas Trilhas' },
+                            { icon: <TrendingUp size={17} />, label: 'Progresso' },
+                        ].map(({ icon, label }) => (
+                            <NavItem key={label} icon={icon} label={label} active={abaAtual === label} onClick={() => setAbaAtual(label)} />
+                        ))}
+                        <span className="dash-nav-section" style={{ marginTop: 8 }}>Sistema</span>
+                        <NavItem icon={<Settings size={17} />} label="Configurações" active={abaAtual === 'Configurações'} onClick={() => setAbaAtual('Configurações')} />
+                    </nav>
+
+                    <div className="dash-sidebar-footer">
+                        <div className="dash-user-row">
+                            <div className="dash-avatar">{initials}</div>
+                            <div className="dash-user-info">
+                                <div className="dash-user-name">{user?.displayName || 'Usuário'}</div>
+                                <div className="dash-user-plan">Plano Pro</div>
                             </div>
-                            <h2 className="text-2xl font-bold mb-2 text-white">Criar Nova Trilha</h2>
-                            <p className="text-slate-400 mb-8 leading-relaxed">A inteligência artificial analisa seu perfil e cria uma jornada de estudos sob medida.</p>
-                            <button
-                                onClick={() => navigate('/quiz')}
-                                className="w-full py-4 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 hover:-translate-y-0.5 transition-all"
-                            >
-                                Iniciar Assistente
+                            <button className="dash-logout-btn" onClick={handleLogout} title="Sair" aria-label="Sair">
+                                <LogOut size={15} />
                             </button>
                         </div>
+                    </div>
+                </aside>
 
-                        <div className="bg-[#1e293b]/30 backdrop-blur-md border border-white/10 rounded-3xl p-8 flex-1 shadow-2xl flex flex-col justify-between hover:border-white/20 transition-all group">
-                            <div>
-                                <div className="flex items-center justify-between mb-6">
-                                    <p className="text-xs font-bold uppercase tracking-widest text-indigo-400">Sua Trilha Atual</p>
-                                    {roadmap && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-slate-300">{roadmap.level}</span>}
+                {/* ── MAIN ── */}
+                <main className="dash-main">
+                    {/* Topbar */}
+                    <div className="dash-topbar">
+                        <div>
+                            <h1>Bem-vindo de volta, {firstName}</h1>
+                            <p>Continue sua jornada de aprendizado personalizada.</p>
+                        </div>
+                        <div className="dash-topbar-actions">
+                            <button className="dash-icon-btn" aria-label="Notificações">
+                                <Bell size={17} />
+                                <span className="dash-notif-dot" />
+                            </button>
+                            <button className="dash-cta-btn" onClick={() => navigate('/quiz')}>
+                                <Plus size={16} />
+                                Nova trilha
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Dashboard Main View */}
+                    {abaAtual === 'Dashboard' && (
+                        <>
+                            <div className="dash-stats">
+                                <StatCard icon={<CheckCircle size={14} />} label="Concluído" value="45%" delta="+8% esta semana" />
+                                <StatCard icon={<Clock size={14} />} label="Tempo de estudo" value="12h" delta="+2h vs semana passada" />
+                                <StatCard icon={<Zap size={14} />} label="Habilidades" value="8" delta="Sem alteração" neutral />
+                                <StatCard icon={<Flame size={14} />} label="Sequência" value="7d" delta="Recorde pessoal!" />
+                            </div>
+
+                            <div className="dash-two-col">
+                                <div className={`dash-card${roadmap ? ' underway' : ''}`}>
+                                    <div className="dash-card-eyebrow">
+                                        Trilha ativa
+                                        {roadmap && <Badge>{roadmap.level || 'Intermediário'}</Badge>}
+                                    </div>
+
+                                    {loadingRoadmap ? (
+                                        <div className="dash-loading-row">
+                                            <div className="dash-spinner" />
+                                            Carregando seu progresso...
+                                        </div>
+                                    ) : roadmap ? (
+                                        <>
+                                            <div className="dash-trail-title">{roadmap.title}</div>
+                                            <div className="dash-node-list">
+                                                {roadmap.nodes?.slice(0, 3).map((node, i) => (
+                                                    <div key={node.id} className="dash-node-row">
+                                                        <span className="dash-node-name">
+                                                            <span className="dash-node-num">{i + 1}.</span>
+                                                            {node.label}
+                                                        </span>
+                                                        <NodeStatus status={node.status} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <button className="dash-continue-btn" onClick={() => navigate('/roadmap')}>
+                                                Continuar estudando <ArrowRight size={14} />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <EmptyState
+                                            title="Nenhuma trilha ativa"
+                                            description="Crie sua primeira trilha com o assistente de IA e comece a aprender de forma personalizada."
+                                            action={
+                                                <button className="dash-cta-btn" onClick={() => navigate('/quiz')} style={{ marginTop: 4 }}>
+                                                    <Sparkles size={15} /> Iniciar assistente
+                                                </button>
+                                            }
+                                        />
+                                    )}
                                 </div>
 
-                                {loadingRoadmap ? (
-                                    <div className="py-10 flex text-slate-500 font-medium items-center gap-3">
-                                        <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                                        Carregando seu progresso...
+                                <div className="dash-card">
+                                    <div className="dash-card-header">
+                                        <span className="dash-card-title">Progresso por área</span>
+                                        <Badge>Última semana</Badge>
                                     </div>
-                                ) : roadmap ? (
-                                    <>
-                                        <h2 className="text-3xl font-extrabold mb-6 text-white group-hover:text-indigo-50 transition-colors">{roadmap.title}</h2>
-                                        <div className="space-y-3">
-                                            {roadmap.nodes?.slice(0, 3).map((node, i) => (
-                                                <div key={node.id} className="flex items-center justify-between bg-white/[0.03] border border-white/5 p-4 rounded-2xl hover:bg-white/[0.06] transition-colors">
-                                                    <span className="text-sm font-semibold text-slate-200 flex items-center gap-3">
-                                                        <span className="text-indigo-400/50 w-4">{i + 1}.</span>
-                                                        {node.label}
-                                                    </span>
-                                                    <span className={`text-xs px-2 py-1 rounded-md font-bold uppercase ${node.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-500'}`}>
-                                                        {node.status === 'completed' ? 'Ok' : node.status === 'locked' ? 'Locked' : 'Doing'}
-                                                    </span>
-                                                </div>
-                                            ))}
+                                    <div className="dash-ring-wrap">
+                                        <ProgressRing pct={45} />
+                                        <div style={{ textAlign: 'center', marginRight: 4 }}>
+                                            <span style={{ fontSize: 22, fontWeight: 600, color: 'var(--text-primary)', display: 'block', letterSpacing: '-.5px' }}>45%</span>
+                                            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>concluído</span>
                                         </div>
-                                    </>
+                                        <div className="dash-skill-bars">
+                                            <SkillBar label="Frontend" pct={68} />
+                                            <SkillBar label="Backend" pct={40} color="#2dd4bf" />
+                                            <SkillBar label="Banco de dados" pct={22} color="#a78bfa" />
+                                            <SkillBar label="DevOps" pct={10} color="#475569" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="dash-section-header">
+                                    <span className="dash-section-title">Ações rápidas</span>
+                                </div>
+                                <div className="dash-quick-grid">
+                                    {[
+                                        { icon: <Sparkles size={17} />, color: 'indigo', label: 'Criar trilha com IA', sub: 'Diagnóstico personalizado', action: () => navigate('/quiz') },
+                                        { icon: <BarChart2 size={17} />, color: 'teal', label: 'Ver relatório', sub: 'Histórico detalhado', action: () => setAbaAtual('Progresso') },
+                                        { icon: <Compass size={17} />, color: 'purple', label: 'Explorar trilhas', sub: 'Curadoria da semana', action: () => { } },
+                                    ].map(({ icon, color, label, sub, action }) => (
+                                        <div key={label} className="dash-qa-card" onClick={action} role="button" tabIndex={0}>
+                                            <div className={`dash-qa-icon ${color}`}>{icon}</div>
+                                            <div className="dash-qa-text">
+                                                <div className="dash-qa-label">{label}</div>
+                                                <div className="dash-qa-sub">{sub}</div>
+                                            </div>
+                                            <ArrowRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="dash-section-header">
+                                    <span className="dash-section-title">Trilhas em destaque</span>
+                                    <button className="dash-see-all">Ver todas →</button>
+                                </div>
+                                {loadingDestaques ? (
+                                    <div className="dash-loading-row">
+                                        <div className="dash-spinner" />
+                                        Carregando destaques...
+                                    </div>
+                                ) : destaques.length > 0 ? (
+                                    <div className="dash-highlights-grid">
+                                        {destaques.map((d, i) => (
+                                            <div key={d.id} className="dash-highlight-card" onClick={() => navigate('/quiz')} role="button" tabIndex={0}>
+                                                <div className="dash-hc-top">
+                                                    <div className="dash-hc-title">{d.name}</div>
+                                                    <div className="dash-tag-wrap">
+                                                        {(d.tags || []).map(t => <span key={t} className="dash-tag">{t}</span>)}
+                                                    </div>
+                                                </div>
+                                                <div className="dash-hc-bar-wrap">
+                                                    <div className="dash-hc-meta">
+                                                        <span>Progresso da comunidade</span>
+                                                        <span>{d.progress || 0}%</span>
+                                                    </div>
+                                                    <div className="dash-hc-track">
+                                                        <div className="dash-hc-fill" style={{ width: `${d.progress || 0}%`, background: barColors[i % barColors.length] }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 ) : (
-                                    <div className="py-10">
-                                        <h2 className="text-2xl font-semibold mb-3 text-white">Nenhuma trilha ativa</h2>
-                                        <p className="text-slate-400 leading-relaxed max-w-md">Parece que você ainda não gerou seu roteiro. Utilize o assistente ao lado para criar o seu currículo inteligente.</p>
+                                    <div className="dash-highlights-grid">
+                                        {[
+                                            { name: 'Python para Data Science', tags: ['Python', 'ML'], progress: 71, color: 'var(--indigo)' },
+                                            { name: 'UI/UX Design Moderno', tags: ['Design', 'Figma'], progress: 54, color: '#2dd4bf' },
+                                            { name: 'DevOps & Cloud na prática', tags: ['AWS', 'Docker'], progress: 38, color: '#a78bfa' },
+                                            { name: 'Fundamentos de IA', tags: ['IA', 'Teoria'], progress: 62, color: 'var(--indigo)' },
+                                        ].map(({ name, tags, progress, color }) => (
+                                            <div key={name} className="dash-highlight-card" onClick={() => navigate('/quiz')} role="button" tabIndex={0}>
+                                                <div className="dash-hc-top">
+                                                    <div className="dash-hc-title">{name}</div>
+                                                    <div className="dash-tag-wrap">
+                                                        {tags.map(t => <span key={t} className="dash-tag">{t}</span>)}
+                                                    </div>
+                                                </div>
+                                                <div className="dash-hc-bar-wrap">
+                                                    <div className="dash-hc-meta">
+                                                        <span>Progresso da comunidade</span>
+                                                        <span>{progress}%</span>
+                                                    </div>
+                                                    <div className="dash-hc-track">
+                                                        <div className="dash-hc-fill" style={{ width: `${progress}%`, background: color }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </div>
+                        </>
+                    )}
 
-                            {roadmap && abaAtual === 'Dashboard' && (
-                                <button
-                                    onClick={() => navigate('/roadmap')}
-                                    className="mt-8 py-4 w-full rounded-xl font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all hover:border-indigo-500/30"
-                                >
-                                    Continuar Estudando
+                    {/* Renderiza o componente real de Minhas Trilhas quando ativo */}
+                    {abaAtual === 'Minhas Trilhas' && (
+                        <MinhasTrilhasPage userId={user?.uid} />
+                    )}
+
+                    {abaAtual === 'Configurações' && (
+                        <Configuracao userId={user?.uid} />
+                    )}
+
+                    {abaAtual === 'Progresso' && (
+                        <ProgressoPage userId={user?.uid} />
+                    )}
+
+                    {abaAtual !== 'Dashboard' && abaAtual !== 'Minhas Trilhas' && abaAtual !== 'Configurações' && (
+                        <EmptyState
+                            title={`${abaAtual} em construção`}
+                            description={`A aba ${abaAtual} será liberada nas próximas atualizações do Intellectus.`}
+                            action={
+                                <button className="dash-cta-btn" onClick={() => setAbaAtual('Dashboard')} style={{ marginTop: 4 }}>
+                                    Voltar ao Dashboard
                                 </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {abaAtual === 'Dashboard' && (
-                    <>
-                        {/* Stats Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                            <StatCard title="Concluído" value="45%" color="bg-indigo-500" />
-                            <StatCard title="Tempo de Estudo" value="12h" color="bg-emerald-500" />
-                            <StatCard title="Habilidades" value="8" color="bg-purple-500" />
-                        </div>
-
-                        {/* Recent Trilhas */}
-                        <section>
-                            <h2 className="text-xl font-semibold mb-6 text-white">Trilhas em destaque</h2>
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                {loadingDestaques ? (
-                                    <p className="text-slate-400 col-span-2">Carregando destaques...</p>
-                                ) : destaques.length > 0 ? (
-                                    destaques.map((destaque) => (
-                                        <TrilhaCard
-                                            key={destaque.id}
-                                            title={destaque.name}
-                                            progress={destaque.progress || 0}
-                                            tags={destaque.tags || []}
-                                            onClick={() => handleAdoptHighlight(destaque.id)}
-                                        />
-                                    ))
-                                ) : (
-                                    <p className="text-slate-400 col-span-2">Nenhum destaque disponível no momento.</p>
-                                )}
-                            </div>
-                        </section>
-                    </>
-                )}
-
-                {abaAtual !== 'Dashboard' && (
-                    <div className="py-20 flex flex-col items-center justify-center text-center">
-                        <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mb-6">
-                            <Settings size={32} className="text-indigo-400" />
-                        </div>
-                        <h2 className="text-2xl font-bold text-white mb-2">Página em Construção</h2>
-                        <p className="text-slate-400 max-w-sm">A aba {abaAtual} será liberada nas próximas atualizações do Intelectus.</p>
-                    </div>
-                )}
-            </main>
-        </div>
+                            }
+                        />
+                    )}
+          
+                    
+          
+                </main>
+            </div>
+        </>
     )
 }
-
-const NavItem = ({ icon, label, active = false, onClick }) => (
-    <div onClick={onClick} className={`
-    flex items-center gap-3 p-4 rounded-2xl cursor-pointer transition-all border font-semibold
-    ${active
-            ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20 shadow-lg shadow-indigo-500/5'
-            : 'text-slate-400 border-transparent hover:text-white hover:bg-white/[0.04]'
-        }
-  `}>
-        {icon}
-        <span>{label}</span>
-    </div>
-)
-
-const StatCard = ({ title, value, color }) => (
-    <div className="relative overflow-hidden bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-3xl p-6 hover:-translate-y-1 transition-all hover:bg-white/[0.04] group">
-        <div className={`absolute top-0 left-0 w-full h-1 ${color} opacity-80 group-hover:opacity-100 transition-opacity`}></div>
-        <p className="text-slate-400 font-medium mb-3">{title}</p>
-        <h3 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-white to-slate-400 tracking-tight">{value}</h3>
-    </div>
-)
-
-const TrilhaCard = ({ title, progress, tags, onClick }) => (
-    <div onClick={onClick} className="bg-white/[0.02] backdrop-blur-lg border border-white/5 rounded-3xl p-7 hover:-translate-y-1.5 hover:bg-white/[0.04] transition-all cursor-pointer group shadow-lg hover:shadow-2xl hover:border-indigo-500/30">
-        <div className="flex justify-between items-start mb-6">
-            <h3 className="text-xl font-extrabold text-slate-200 group-hover:text-indigo-50 transition-colors leading-tight pr-4">{title}</h3>
-            <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
-                {tags.map(t => <span key={t} className="text-xs font-bold px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-400">{t}</span>)}
-            </div>
-        </div>
-        <div className="w-full bg-[#0f172a] inset-shadow-sm h-3 rounded-full mb-3 border border-white/5 overflow-hidden">
-            <div className="bg-gradient-to-r from-indigo-500 to-emerald-400 h-full rounded-full transition-all duration-1000" style={{ width: `${progress}%` }}></div>
-        </div>
-        <p className="text-right text-xs font-bold text-slate-500 uppercase tracking-wider">{progress}% CONCLUÍDO</p>
-    </div>
-)
 
 export default Dashboard
